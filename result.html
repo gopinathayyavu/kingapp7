@@ -16,132 +16,176 @@
 
   <!-- Existing assets -->
   <script src="js/jquery.tools.min.js"></script>
-  <link href="css/slidingtabs.css" rel="stylesheet" type="text/css" />
-  <link href="css/easySlider.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="js/jquery.scrollTo.js"></script>
   <script type="text/javascript" src="js/slidingtabs.js"></script>
 
-  <style type="text/css">
-    ul#saturday {
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-      width: auto;
-      position: relative;
-      display: block;
-      height: 36px;
-      text-transform: uppercase;
-      font-size: 12px;
-      font-weight: bold;
-      background: transparent url("img/bgOFF.gif") repeat-x top left;
-      font-family: Helvetica, Arial, Verdana, sans-serif;
-      border-bottom: 4px solid #336666;
-      border-top: 1px solid #C0E2D4;
-    }
-
-    ul#saturday li {
-      display: block;
-      float: left;
-      margin: 0;
-      padding: 0;
-    }
-
-    ul#saturday li a {
-      display: block;
-      float: left;
-      color: #874B46;
-      text-decoration: none;
-      padding: 12px 20px 0 20px;
-      height: 24px;
-      background: transparent url("img/bgDIVIDER.gif") no-repeat top right;
-    }
-
-    ul#saturday li a:hover {
-      background: transparent url("img/bgHOVER.gif") no-repeat top right;
-    }
-
-    ul#saturday li a.current,
-    ul#saturday li a.current:hover {
-      color: #fff;
-      background: transparent url("img/bgON.gif") no-repeat top right;
-    }
-
-    body {
-      font-family: "Lucida Grande", "bitstream vera sans", "trebuchet ms", sans-serif, verdana;
-    }
-
-    a:active {
-      outline: none;
-    }
-
-    :focus {
-      outline-style: none;
-      -moz-outline-style: none;
-    }
-
-    body {
-      font-family: "Lucida Grande", "bitstream vera sans", "trebuchet ms", sans-serif, verdana;
-      background-image: url("img/innerwrapbg3.jpg");
-      background-repeat: no-repeat;
-      background-size: cover;
-      /* Ensures image covers the whole screen */
-      background-attachment: fixed;
-      /* Keeps image fixed when scrolling */
-      background-position: center;
-      /* Centers the image */
-      margin: 0;
-    }
-
-    .textbox {
-      background: none;
-      color: #874B46;
-      border: none;
-      cursor: default;
-      font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
-      text-align: center;
-      font-size: 20px;
-      margin-top: 10px;
-    }
-
-    .label1 {
-      background: none;
-      color: #000;
-      border: none;
-      cursor: default;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 15px;
-      height: 24px;
-    }
-
-    .table1 {
-      background: none;
-      border: none;
-      color: none;
-    }
-
-    /* Panels default hidden; reveal via JS */
-    #panel .panel {
-      display: none;
-      will-change: transform, opacity;
-    }
-
-    /* Active tab style */
-    #scroller-header a.active {
-      font-weight: 700;
-      text-decoration: underline;
-    }
-  </style>
-
   <!-- Firebase (compat) -->
 
+  <style>
+    :root{
+      /* 🔧 Set your background image here */
+      --bg: url('img/bg-img.png');
+
+      /* Light lottery palette (no motion) */
+      --ink:#1a1a1a; --muted:#5c5c5c;
+      --gold:#f7c948; --gold-deep:#e3a600;
+      --red:#e53935; --red-deep:#c62828;
+
+      --glass:rgba(255,255,255,.88);
+      --glass-strong:rgba(255,255,255,.95);
+      --glass-brd:rgba(0,0,0,.10);
+      --shadow:0 10px 28px rgba(0,0,0,.12);
+      --r-lg:18px; --r-md:12px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      margin:0; padding:0; color:var(--ink);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;
+    }
+
+    /* Full-page responsive background image */
+    body{
+      text-align:center;
+      background-image: var(--bg);
+      background-repeat:no-repeat;
+      background-position:center center;
+      background-size:cover;
+      min-height:100dvh;
+    }
+
+    /* ===== Header (replaces old header <img>) ===== */
+    header{
+      position:relative;
+      z-index:2;
+      height:90px;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(180deg, var(--glass-strong), rgba(255,255,255,.88));
+      border-bottom:1px solid var(--glass-brd);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    header h1{
+      margin:0; text-transform:uppercase; letter-spacing:1px;
+      font-weight:1000; font-size:clamp(26px,4vw,38px);
+      background: linear-gradient(135deg, #8d5c00, #ffdb7a 35%, #fff3c4 55%, #e2a700);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow: 0 1px 0 rgba(255,255,255,.85);
+    }
+
+    /* ===== Top nav (your #saturday stays) ===== */
+    #saturday{
+      list-style:none; margin:14px auto 0; padding:10px;
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
+      background: var(--glass);
+      border-radius: var(--r-lg);
+      width:min(1200px,94vw);
+      border:1px solid var(--glass-brd);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    #saturday>li{ display:flex; align-items:center; }
+
+    /* Gold buttons; red on hover (no animation) */
+    #saturday a{
+      display:inline-flex; align-items:center; justify-content:center; height:40px;
+      padding:0 14px; border-radius:10px; text-decoration:none; font-weight:900;
+      color:#6b4b00;
+      background: linear-gradient(180deg, #fff9e9, #ffe1a8);
+      border:1px solid rgba(230,164,0,.35);
+      box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(247,201,72,.16);
+    }
+    #saturday a:hover{
+      color:#7a0f0d;
+      background: linear-gradient(180deg, #ffe5e2, #ffd0cc);
+      border-color: rgba(229,57,53,.35);
+      box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(229,57,53,.16);
+    }
+
+    /* Timer chunk */
+    .textbox{ font-weight:900; color:#6b4b00; }
+    #saturday .textbox{
+      display:inline-flex; align-items:center;
+      background: linear-gradient(180deg, #ffffff, #fff5df);
+      border:1px solid rgba(230,164,0,.35);
+      border-radius:999px; padding:6px 10px; margin:0 4px;
+      box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(247,201,72,.16);
+    }
+    #displaytime1,#displaytime2{
+      width:106px; height:30px; text-align:center; border:none; outline:none;
+      color:#1f1f1f; font-weight:900; letter-spacing:.5px; margin:0 6px;
+      background: linear-gradient(180deg, #ffffff, #f6f6f6);
+      border-radius:10px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.05);
+    }
+
+    /* ===== Slot header (links) ===== */
+    #scroller-header{
+      width:100%; margin-top:12px;
+      display:flex; justify-content:center;
+    }
+    #scroller-table{
+      width:min(1200px,94vw);
+      background: var(--glass);
+      border:1px solid var(--glass-brd);
+      border-radius: var(--r-md);
+      box-shadow: var(--shadow);
+      padding:6px 8px;
+      backdrop-filter: blur(6px);
+    }
+    #slot-links{
+      display:flex; gap:8px; justify-content:center; align-items:center; list-style:none; margin:0; padding:0;
+      flex-wrap:wrap;
+    }
+    #slot-links a{
+      display:inline-flex; align-items:center; justify-content:center;
+      height:34px; padding:0 10px; border-radius:9px; text-decoration:none;
+      font-weight:900; font-size:12px; color:#5a3a00;
+      background: linear-gradient(180deg, #fff9e9, #ffe9ba);
+      border:1px solid rgba(230,164,0,.35);
+    }
+    #slot-links a.active{
+      color:#7a0f0d;
+      background: linear-gradient(180deg, #ffe2df, #ffc9c4);
+      border-color: rgba(229,57,53,.35);
+    }
+
+    /* ===== Panels ===== */
+    #scroller-body{
+      width:100%; display:flex; justify-content:center; margin:12px 0 18px;
+    }
+    #mask{ width:min(1200px,94vw); }
+    #panel{ position:relative; }
+
+    /* Panel cards sit on glass so they read on any photo */
+    #panel .panel{
+      display:none;
+      background: var(--glass-strong);
+      border:1px solid var(--glass-brd);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow);
+      padding:14px;
+      color:#1b1b1b;
+    }
+    #panel .panel a{ color:#0b33b7; text-decoration:none; }
+
+    /* Responsive */
+    @media (max-width: 720px){
+      #saturday{padding:10px 8px;}
+      #saturday a{height:38px; padding:0 12px;}
+      #displaytime1,#displaytime2{width:96px;}
+      #slot-links a{height:32px; padding:0 8px; font-size:11px;}
+    }
+  </style>
 </head>
 
 <body style="text-align:center" onload="boot()">
+  <!-- NEW header bar (replaces the old header image row) -->
+  <header><h1>KINGAPP7</h1></header>
+
   <form name="timeform">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <th scope="col"><img src="img/top1.png" width="100%" height="120" /></th>
-      </tr>
+      <!-- removed the <img> header row -->
       <tr align="center">
         <td>
           <ul id="saturday">
@@ -152,12 +196,10 @@
             <li><a href="#" title="">Contact us</a></li>
             <li><a href="chart" title="">Chart</a></li>
             <li>
-              <span class="textbox" >DRAW TIME :</span>
-              <input type="text" id="displaytime1" name="displaytime1" size="8" readonly class="textbox"
-                value="--:-- --" />
+              <span class="textbox">DRAW TIME :</span>
+              <input type="text" id="displaytime1" name="displaytime1" size="8" readonly class="textbox" value="--:-- --" />
               <span class="textbox">TIME LEFT :</span>
-              <input type="text" id="displaytime2" name="displaytime2" size="8" class="textbox" readonly
-                value="00:00:00" />
+              <input type="text" id="displaytime2" name="displaytime2" size="8" class="textbox" readonly value="00:00:00" />
             </li>
           </ul>
         </td>
@@ -167,17 +209,16 @@
 
   <!-- Slot links -->
   <div id="scroller-header">
-    <div id='scroller-table' style="background: rgba(255, 254, 254, 0.568);padding-top: 10px; height: 50px;">
+    <div id='scroller-table'>
       <ul id="slot-links">
-        <!-- Only animate panels; header is independent -->
-        <li><a href="#panel-1" data-rel="panel" style="font-size:10px;color:black !important;">LOTO 11:00 A</a></li>
-        <li><a href="#panel-2" data-rel="panel" style="font-size:10px;color:black !important;">JACK 12:00 P</a></li>
-        <li><a href="#panel-3" data-rel="panel" style="font-size:10px;color:black !important;">LUCK 01:00 P</a></li>
-        <li><a href="#panel-4" data-rel="panel" style="font-size:10px;color:black !important;">QUEE 02:00 P</a></li>
-        <li><a href="#panel-5" data-rel="panel" style="font-size:10px;color:black !important;">KING 04:00 P</a></li>
-        <li><a href="#panel-6" data-rel="panel" style="font-size:10px;color:black !important;">STAR 06:00 P</a></li>
-        <li><a href="#panel-7" data-rel="panel" style="font-size:10px;color:black !important;">JACK 07:00 P</a></li>
-        <li><a href="#panel-8" data-rel="panel" style="font-size:10px;color:black !important;">LOTO 08:00 P</a></li>
+        <li><a href="#panel-1" data-rel="panel">LOTO 11:00 A</a></li>
+        <li><a href="#panel-2" data-rel="panel">JACK 12:00 P</a></li>
+        <li><a href="#panel-3" data-rel="panel">LUCK 01:00 P</a></li>
+        <li><a href="#panel-4" data-rel="panel">QUEE 02:00 P</a></li>
+        <li><a href="#panel-5" data-rel="panel">KING 04:00 P</a></li>
+        <li><a href="#panel-6" data-rel="panel">STAR 06:00 P</a></li>
+        <li><a href="#panel-7" data-rel="panel">JACK 07:00 P</a></li>
+        <li><a href="#panel-8" data-rel="panel">LOTO 08:00 P</a></li>
       </ul>
     </div>
   </div>
@@ -187,57 +228,49 @@
     <div id="mask">
       <div id="panel">
 
-        <div id="panel-1" class='panel'
-          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+        <div id="panel-1" class='panel' style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
           </br>LOTO 11:00 AM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
           3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
           3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
         </div>
 
-        <div id="panel-2" class='panel'
-          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+        <div id="panel-2" class='panel' style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
           </br>JACK 12:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
           3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
           3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
         </div>
 
-        <div id="panel-3" class='panel'
-          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+        <div id="panel-3" class='panel' style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
           </br>LUCK 01:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
           3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
           3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
         </div>
 
-        <div id="panel-4" class='panel'
-          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+        <div id="panel-4" class='panel' style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
           </br>QUEE 02:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
           3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
           3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
         </div>
 
-        <div id="panel-5" class='panel'
-          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+        <div id="panel-5" class='panel' style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
           </br>KING 04:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
           3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
           3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
         </div>
 
-        <div id="panel-6" class='panel'
-          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+        <div id="panel-6" class='panel' style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
           </br>STAR 06:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
           3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
           3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
         </div>
 
-        <div id="panel-7" class='panel'
-          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+        <div id="panel-7" class='panel' style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
           </br>JACK 07:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
           3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
           3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
         </div>
 
-        <div id="panel-8" class='panel'
-          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+        <div id="panel-8" class='panel' style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
           </br>LOTO 08:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
           3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
           3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
@@ -246,6 +279,7 @@
       </div>
     </div>
   </div>
+
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
@@ -279,7 +313,6 @@
       return t;
     };
 
-    // 12h format for header
     function fmt12(d) {
       let h = d.getHours();
       const m = String(d.getMinutes()).padStart(2, '0');
@@ -288,7 +321,7 @@
       return `${String(h).padStart(2, '0')}:${m} ${ampm}`;
     }
 
-    // ===== NEXT DRAW (always from schedule, never from clicks) =====
+    // ===== NEXT DRAW =====
     function computeNextDraw() {
       const n = nowIST();
       const slots = (Array.isArray(SLOTS) ? SLOTS : [])
@@ -323,7 +356,7 @@
       fRemain.value = `${hh}:${mm}:${ss}`;
     }
 
-    // Live load slots; header always recomputed from SLOTS
+    // Live load slots
     function watchSlots() {
       firebase.database().ref('config/slots').on('value', snap => {
         const val = snap.val();
@@ -331,12 +364,11 @@
           const valid = val.filter(s => typeof s === 'string' && /^\d{2}:\d{2}$/.test(s));
           if (valid.length) SLOTS = valid;
         }
-        // immediate refresh when slots change
         updateHeader();
-      }, () => { /* ignore errors, use fallback */ });
+      }, () => {});
     }
 
-    // ===== Live results logic (unchanged) =====
+    // ===== Live results =====
     const latestByTime = Object.create(null);
     function getPrizeAnchors(panelId) {
       const p = document.getElementById(panelId);
@@ -390,7 +422,7 @@
     }
     setInterval(renderAll, 1000);
 
-    // ===== Panel animation (right -> left). Header IGNORE clicks. =====
+    // ===== Panel animation (unchanged, only panels slide) =====
     document.addEventListener('DOMContentLoaded', function () {
       const links = Array.from(document.querySelectorAll('#scroller-header a[data-rel="panel"]'));
       const panels = Array.from(document.querySelectorAll('#panel > .panel'));
@@ -413,7 +445,7 @@
 
         next.style.display = 'block';
         next.style.opacity = '0';
-        next.style.transform = 'translateX(100vw)'; // full-right
+        next.style.transform = 'translateX(100vw)';
         next.style.transition = 'none';
 
         void next.offsetWidth;
@@ -431,7 +463,6 @@
         next.addEventListener('transitionend', cleanup);
       }
 
-      // Only animate panels; DO NOT touch header
       links.forEach(a => {
         a.addEventListener('click', function (e) {
           e.preventDefault();
@@ -449,12 +480,11 @@
 
     // ===== Boot =====
     function boot() {
-      watchSlots();           // live slots from Firebase (or fallback)
-      updateHeader();         // first render
-      setInterval(updateHeader, 1000); // constantly show next draw & its remaining time
-      listenToday();          // results listener
+      watchSlots();
+      updateHeader();
+      setInterval(updateHeader, 1000);
+      listenToday();
     }
   </script>
 </body>
-
 </html>
