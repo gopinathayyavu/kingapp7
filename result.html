@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>JACKPOT-COM</title>
+
+  <!-- GA (kept) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RP6R1WJ55"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-7RP6R1WJ55');
+  </script>
+
+  <!-- Existing assets -->
+  <script src="js/jquery.tools.min.js"></script>
+  <link href="css/slidingtabs.css" rel="stylesheet" type="text/css" />
+  <link href="css/easySlider.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="js/jquery.scrollTo.js"></script>
+  <script type="text/javascript" src="js/slidingtabs.js"></script>
+
+  <style type="text/css">
+    ul#saturday {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      width: auto;
+      position: relative;
+      display: block;
+      height: 36px;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: bold;
+      background: transparent url("img/bgOFF.gif") repeat-x top left;
+      font-family: Helvetica, Arial, Verdana, sans-serif;
+      border-bottom: 4px solid #336666;
+      border-top: 1px solid #C0E2D4;
+    }
+
+    ul#saturday li {
+      display: block;
+      float: left;
+      margin: 0;
+      padding: 0;
+    }
+
+    ul#saturday li a {
+      display: block;
+      float: left;
+      color: #874B46;
+      text-decoration: none;
+      padding: 12px 20px 0 20px;
+      height: 24px;
+      background: transparent url("img/bgDIVIDER.gif") no-repeat top right;
+    }
+
+    ul#saturday li a:hover {
+      background: transparent url("img/bgHOVER.gif") no-repeat top right;
+    }
+
+    ul#saturday li a.current,
+    ul#saturday li a.current:hover {
+      color: #fff;
+      background: transparent url("img/bgON.gif") no-repeat top right;
+    }
+
+    body {
+      font-family: "Lucida Grande", "bitstream vera sans", "trebuchet ms", sans-serif, verdana;
+    }
+
+    a:active {
+      outline: none;
+    }
+
+    :focus {
+      outline-style: none;
+      -moz-outline-style: none;
+    }
+
+    body {
+      font-family: "Lucida Grande", "bitstream vera sans", "trebuchet ms", sans-serif, verdana;
+      background-image: url("img/innerwrapbg3.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      /* Ensures image covers the whole screen */
+      background-attachment: fixed;
+      /* Keeps image fixed when scrolling */
+      background-position: center;
+      /* Centers the image */
+      margin: 0;
+    }
+
+    .textbox {
+      background: none;
+      color: #874B46;
+      border: none;
+      cursor: default;
+      font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+      text-align: center;
+      font-size: 20px;
+      margin-top: 10px;
+    }
+
+    .label1 {
+      background: none;
+      color: #000;
+      border: none;
+      cursor: default;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      height: 24px;
+    }
+
+    .table1 {
+      background: none;
+      border: none;
+      color: none;
+    }
+
+    /* Panels default hidden; reveal via JS */
+    #panel .panel {
+      display: none;
+      will-change: transform, opacity;
+    }
+
+    /* Active tab style */
+    #scroller-header a.active {
+      font-weight: 700;
+      text-decoration: underline;
+    }
+  </style>
+
+  <!-- Firebase (compat) -->
+
+</head>
+
+<body style="text-align:center" onload="boot()">
+  <form name="timeform">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th scope="col"><img src="img/top1.png" width="100%" height="120" /></th>
+      </tr>
+      <tr align="center">
+        <td>
+          <ul id="saturday">
+            <li><a href="/" title="Home">Home</a></li>
+            <li><a href="result" title="Today Result">Today Result</a></li>
+            <li><a href="resultdownload" title="Download Result">Download Result</a></li>
+            <li><a href="#" title="">Schemes </a></li>
+            <li><a href="#" title="">Contact us</a></li>
+            <li><a href="chart" title="">Chart</a></li>
+            <li>
+              <span class="textbox" >DRAW TIME :</span>
+              <input type="text" id="displaytime1" name="displaytime1" size="8" readonly class="textbox"
+                value="--:-- --" />
+              <span class="textbox">TIME LEFT :</span>
+              <input type="text" id="displaytime2" name="displaytime2" size="8" class="textbox" readonly
+                value="00:00:00" />
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <!-- Slot links -->
+  <div id="scroller-header">
+    <div id='scroller-table' style="background: rgba(255, 254, 254, 0.568);padding-top: 10px; height: 50px;">
+      <ul id="slot-links">
+        <!-- Only animate panels; header is independent -->
+        <li><a href="#panel-1" data-rel="panel" style="font-size:10px;color:black !important;">LOTO 11:00 A</a></li>
+        <li><a href="#panel-2" data-rel="panel" style="font-size:10px;color:black !important;">JACK 12:00 P</a></li>
+        <li><a href="#panel-3" data-rel="panel" style="font-size:10px;color:black !important;">LUCK 01:00 P</a></li>
+        <li><a href="#panel-4" data-rel="panel" style="font-size:10px;color:black !important;">QUEE 02:00 P</a></li>
+        <li><a href="#panel-5" data-rel="panel" style="font-size:10px;color:black !important;">KING 04:00 P</a></li>
+        <li><a href="#panel-6" data-rel="panel" style="font-size:10px;color:black !important;">STAR 06:00 P</a></li>
+        <li><a href="#panel-7" data-rel="panel" style="font-size:10px;color:black !important;">JACK 07:00 P</a></li>
+        <li><a href="#panel-8" data-rel="panel" style="font-size:10px;color:black !important;">LOTO 08:00 P</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Panels -->
+  <div id="scroller-body">
+    <div id="mask">
+      <div id="panel">
+
+        <div id="panel-1" class='panel'
+          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+          </br>LOTO 11:00 AM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
+          3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
+          3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
+        </div>
+
+        <div id="panel-2" class='panel'
+          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+          </br>JACK 12:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
+          3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
+          3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
+        </div>
+
+        <div id="panel-3" class='panel'
+          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+          </br>LUCK 01:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
+          3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
+          3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
+        </div>
+
+        <div id="panel-4" class='panel'
+          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+          </br>QUEE 02:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
+          3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
+          3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
+        </div>
+
+        <div id="panel-5" class='panel'
+          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+          </br>KING 04:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
+          3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
+          3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
+        </div>
+
+        <div id="panel-6" class='panel'
+          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+          </br>STAR 06:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
+          3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
+          3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
+        </div>
+
+        <div id="panel-7" class='panel'
+          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+          </br>JACK 07:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
+          3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
+          3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
+        </div>
+
+        <div id="panel-8" class='panel'
+          style="height:400px;font-family:'Courier New', Courier, monospace;text-align:left;font-size:15px;">
+          </br>LOTO 08:00 PM (TUE)</br></br>DRAW NO :223 DRAW DATE ON. 12-08-2025</br></br>
+          3DIGIT 1 ST PRIZE RS. 10000/-&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br>
+          3DIGIT 2 ND PRIZE RS. 1000/- &nbsp;&nbsp;&nbsp;<a style='color:#0000CC'></a></br></br></br></br>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    // ===== Firebase init =====
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNl9NMqKrmYqY9WPG-v-jAFbiv5d-vef8",
+      authDomain: "jackspot-bd84f.firebaseapp.com",
+      databaseURL: "https://jackspot-bd84f-default-rtdb.firebaseio.com",
+      projectId: "jackspot-bd84f",
+      storageBucket: "jackspot-bd84f.firebasestorage.app",
+      messagingSenderId: "740333832481",
+      appId: "1:740333832481:web:89c6c084af318ed1c01660",
+      measurementId: "G-H4QH4TR65X"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // ===== Time helpers (IST) =====
+    let SLOTS = ["11:00", "12:00", "13:00", "14:00", "16:00", "18:00", "19:00", "20:00"]; // fallback
+    const nowIST = () => new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+    const todayIST = () => {
+      const d = nowIST();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    };
+    const istAt = (hhmm) => { const [H, M] = hhmm.split(':').map(Number); const d = nowIST(); d.setHours(H, M, 0, 0); return d; };
+    const nextOccurrenceIST = (hhmm) => {
+      const t = istAt(hhmm);
+      const n = nowIST();
+      if (t <= n) { t.setDate(t.getDate() + 1); }
+      return t;
+    };
+
+    // 12h format for header
+    function fmt12(d) {
+      let h = d.getHours();
+      const m = String(d.getMinutes()).padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12; if (h === 0) h = 12;
+      return `${String(h).padStart(2, '0')}:${m} ${ampm}`;
+    }
+
+    // ===== NEXT DRAW (always from schedule, never from clicks) =====
+    function computeNextDraw() {
+      const n = nowIST();
+      const slots = (Array.isArray(SLOTS) ? SLOTS : [])
+        .map(s => String(s).trim())
+        .filter(s => /^\d{2}:\d{2}$/.test(s))
+        .sort((a, b) => a.localeCompare(b));
+      for (const s of slots) {
+        const t = istAt(s);
+        if (t > n) return t;
+      }
+      return slots.length ? nextOccurrenceIST(slots[0]) : null;
+    }
+    function updateHeader() {
+      const fTime = document.getElementById('displaytime1');
+      const fRemain = document.getElementById('displaytime2');
+      if (!fTime || !fRemain) return;
+
+      const next = computeNextDraw();
+      if (!next) {
+        fTime.value = '--:-- --';
+        fRemain.value = '00:00:00';
+        return;
+      }
+      fTime.value = fmt12(next);
+
+      const nowMs = nowIST().getTime();
+      const tgtMs = next.getTime();
+      let remain = Math.max(0, Math.floor((tgtMs - nowMs) / 1000));
+      const hh = String(Math.floor(remain / 3600)).padStart(2, "0");
+      const mm = String(Math.floor((remain % 3600) / 60)).padStart(2, "0");
+      const ss = String(remain % 60).padStart(2, "0");
+      fRemain.value = `${hh}:${mm}:${ss}`;
+    }
+
+    // Live load slots; header always recomputed from SLOTS
+    function watchSlots() {
+      firebase.database().ref('config/slots').on('value', snap => {
+        const val = snap.val();
+        if (Array.isArray(val) && val.length) {
+          const valid = val.filter(s => typeof s === 'string' && /^\d{2}:\d{2}$/.test(s));
+          if (valid.length) SLOTS = valid;
+        }
+        // immediate refresh when slots change
+        updateHeader();
+      }, () => { /* ignore errors, use fallback */ });
+    }
+
+    // ===== Live results logic (unchanged) =====
+    const latestByTime = Object.create(null);
+    function getPrizeAnchors(panelId) {
+      const p = document.getElementById(panelId);
+      if (!p) return [null, null];
+      const links = p.querySelectorAll('a');
+      return [links[0] || null, links[1] || null];
+    }
+    function renderPanel(panelId, number3) {
+      const [a3, a2] = getPrizeAnchors(panelId);
+      if (!a3 || !a2) return;
+      if (number3 && number3.length === 3) {
+        a3.textContent = number3;
+        a2.textContent = number3.slice(-2);
+      } else {
+        a3.textContent = ''; a2.textContent = '';
+      }
+    }
+    function renderAll() {
+      const now = nowIST();
+      const map = {
+        '11:00': 'panel-1', '12:00': 'panel-2', '13:00': 'panel-3', '14:00': 'panel-4',
+        '16:00': 'panel-5', '18:00': 'panel-6', '19:00': 'panel-7', '20:00': 'panel-8'
+      };
+      Object.keys(map).forEach(t => {
+        const gate = istAt(t);
+        const data = latestByTime[t];
+        if (now >= gate && data && data.number && data.number.length === 3) {
+          renderPanel(map[t], data.number);
+        } else {
+          renderPanel(map[t], '');
+        }
+      });
+    }
+    function listenToday() {
+      const date = todayIST();
+      firebase.database().ref('results/' + date).on('value', snap => {
+        for (const k in latestByTime) delete latestByTime[k];
+        const val = snap.val() || {};
+        Object.keys(val).sort().forEach(key => {
+          const item = val[key] || {};
+          const t = item.time;
+          const n = (item.number || '').toString().replace(/\D/g, '').slice(0, 3);
+          if (!t) return;
+          const prev = latestByTime[t];
+          if (!prev || key > (prev._k || '')) {
+            latestByTime[t] = { number: n, _k: key };
+          }
+        });
+        renderAll();
+      });
+    }
+    setInterval(renderAll, 1000);
+
+    // ===== Panel animation (right -> left). Header IGNORE clicks. =====
+    document.addEventListener('DOMContentLoaded', function () {
+      const links = Array.from(document.querySelectorAll('#scroller-header a[data-rel="panel"]'));
+      const panels = Array.from(document.querySelectorAll('#panel > .panel'));
+
+      const first = panels[0];
+      if (first) first.style.display = 'block';
+      if (links[0]) links[0].classList.add('active');
+
+      function currentPanel() {
+        return panels.find(p => p.style.display !== 'none' && getComputedStyle(p).display !== 'none') || null;
+      }
+
+      function showWithSlide(id) {
+        const next = document.getElementById(id);
+        if (!next) return;
+        const cur = currentPanel();
+        if (cur === next) return;
+
+        if (cur) { cur.style.display = 'none'; }
+
+        next.style.display = 'block';
+        next.style.opacity = '0';
+        next.style.transform = 'translateX(100vw)'; // full-right
+        next.style.transition = 'none';
+
+        void next.offsetWidth;
+        next.style.transition = 'transform 450ms ease, opacity 450ms ease';
+        next.style.transform = 'translateX(0)';
+        next.style.opacity = '1';
+
+        function cleanup(e) {
+          if (e && e.target !== next) return;
+          next.style.transition = '';
+          next.style.transform = '';
+          next.style.opacity = '';
+          next.removeEventListener('transitionend', cleanup);
+        }
+        next.addEventListener('transitionend', cleanup);
+      }
+
+      // Only animate panels; DO NOT touch header
+      links.forEach(a => {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          links.forEach(x => x.classList.remove('active'));
+          a.classList.add('active');
+
+          const href = a.getAttribute('href') || '';
+          if (href.startsWith('#panel-')) {
+            showWithSlide(href.substring(1));
+          }
+        }, { capture: true });
+      });
+    });
+
+    // ===== Boot =====
+    function boot() {
+      watchSlots();           // live slots from Firebase (or fallback)
+      updateHeader();         // first render
+      setInterval(updateHeader, 1000); // constantly show next draw & its remaining time
+      listenToday();          // results listener
+    }
+  </script>
+</body>
+
+</html>

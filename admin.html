@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>JACKPOT-COM</title>
+
+    <!-- your existing libs -->
+    <script src="js/jquery.tools.min.js"></script>
+    <link href="css/slidingtabs.css" rel="stylesheet" type="text/css" />
+    <link href="css/easySlider.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="js/slidingtabs.js"></script>
+
+    <!-- Firebase (compat) – matches your project -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+    <!-- Your auth/guard helpers (protectAdminPage) -->
+    <script src="auth.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        ul#saturday {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            width: auto;
+            position: relative;
+            display: block;
+            height: 36px;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: bold;
+            background: transparent url("img/bgOFF.gif") repeat-x top left;
+            font-family: Helvetica, Arial, Verdana, sans-serif;
+            border-bottom: 4px solid #336666;
+            border-top: 1px solid #C0E2D4
+        }
+
+        ul#saturday li {
+            display: block;
+            float: left;
+            margin: 0;
+            padding: 0
+        }
+
+        ul#saturday li a {
+            display: block;
+            float: left;
+            color: #874B46;
+            text-decoration: none;
+            padding: 12px 20px 0;
+            height: 24px;
+            background: transparent url("img/bgDIVIDER.gif") no-repeat top right
+        }
+
+        ul#saturday li a:hover {
+            background: transparent url("img/bgHOVER.gif") no-repeat top right
+        }
+
+        ul#saturday li a.current,
+        ul#saturday li a.current:hover {
+            color: #fff;
+            background: transparent url("img/bgON.gif") no-repeat top right
+        }
+
+        body {
+            font-family: "Lucida Grande", "bitstream vera sans", "trebuchet ms", sans-serif, verdana;
+            background-color: #fe4800;
+            background-image: url(img/innerwrapbg3.jpg);
+            margin: 0;
+            background-repeat: no-repeat
+        }
+
+        .page-pad {
+            padding: 16px
+        }
+
+        .shows-grid #shows-wrapper {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(220px, 1fr));
+            gap: 12px
+        }
+
+        @media(min-width:700px) {
+            .shows-grid #shows-wrapper {
+                grid-template-columns: repeat(2, minmax(180px, 1fr))
+            }
+        }
+
+        .show-card {
+            background: rgba(255, 255, 255, .85);
+            border: 1px solid #e6edf5;
+            border-radius: 10px;
+            padding: 8px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .05)
+        }
+
+        .show-label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #111827
+        }
+
+        .show-input {
+            width: 85%;
+            padding: 10px 12px;
+            border: 1px solid #cfd8e3;
+            border-radius: 8px;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-align: center;
+            outline: none
+        }
+
+        .show-input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .15)
+        }
+
+        #save-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer
+        }
+
+        #save-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed
+        }
+
+        .save-btns {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer
+        }
+
+        #status {
+            margin-top: 8px;
+            font-weight: 600
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+            margin-top: 5%;
+            width: 50%;
+            margin-left: 20%
+        }
+
+        @media(max-width:768px) {
+            .form-container {
+                width: 100%
+            }
+        }
+
+        @media(max-width:468px) {
+            .form-container {
+                width: 85%;
+                margin-left: 6%
+            }
+
+            .show-card {
+                width: 80% !important
+            }
+        }
+
+        @media(max-width:390px) {
+            .form-container {
+                width: 90%;
+                margin-left: 5%
+            }
+
+            .show-card {
+                width: 80% !important
+            }
+
+            .shows-grid #shows-wrapper {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(180px, 1fr));
+                gap: 5px
+            }
+        }
+
+        .form-group {
+            margin-bottom: 15px
+        }
+
+        .btn-container {
+            text-align: center
+        }
+    </style>
+</head>
+
+<body style="text-align:center" onload="protectAdminPage()">
+    <form name="timeform">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <th scope="col"><img src="img/top1.png" width="100%" height="120" alt="Header" /></th>
+            </tr>
+            <tr align="center">
+                <td>
+                    <ul id="saturday">
+                        <li><a href="/" title="Home">Home</a></li>
+                        <li><a href="result" title="Today Result">Today Result</a></li>
+                        <li><a href="resultdownload" title="Download Result">Download Result</a></li>
+                        <li><a href="#" title="">Schemes</a></li>
+                        <li><a href="#" title="">Contact us</a></li>
+                        <li><a href="chart" title="">Chart</a></li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <h2 style="color:white;">JACKPOT-COM ADMIN</h2>
+
+    <section class="draw-section fade-in">
+        <div class="form-container">
+            <div class="form-group">
+                <label for="date">Select Date</label>
+                <input type="date" id="date" class="show-input" style="width:260px;">
+            </div>
+
+            <div class="form-group">
+
+                <!-- Kerala 6-digit (always editable / overwrites) -->
+                <div class="show-card" style="margin-bottom:12px;">
+                    <div class="show-label">Kerala (6 digits)</div>
+                    <input id="kerala-input" class="show-input" inputmode="numeric" maxlength="6"
+                        placeholder="------" />
+                    <div style="margin-top:6px;">
+                        <button id="save-kerala-btn" class="save-btns" type="button">Save Kerala</button>
+                        <span id="kerala-status" style="margin-left:8px;font-weight:600;"></span>
+                    </div>
+                </div>
+
+
+                <!-- regular shows -->
+                <div class="shows-grid">
+                    <div id="shows-wrapper"></div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top:12px;">
+                <button id="save-btn" type="button">Save</button>
+            </div>
+
+            <p id="status"></p>
+        </div>
+    </section>
+
+    <script>
+        /* ===== Firebase init (compat) – use your own config if different ===== */
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNl9NMqKrmYqY9WPG-v-jAFbiv5d-vef8",
+            authDomain: "jackspot-bd84f.firebaseapp.com",
+            databaseURL: "https://jackspot-bd84f-default-rtdb.firebaseio.com",
+            projectId: "jackspot-bd84f",
+            storageBucket: "jackspot-bd84f.firebasestorage.app",
+            messagingSenderId: "740333832481",
+            appId: "1:740333832481:web:89c6c084af318ed1c01660",
+            measurementId: "G-H4QH4TR65X"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    </script>
+
+    <script>
+        // Unique keys (fixed your duplicate "8")
+        const shows = [
+            { key: 's11', label: 'Show 1 (11:00 AM)', time: '11:00' },
+            { key: 's12', label: 'Show 2 (12:00 PM)', time: '12:00' },
+            { key: 's13', label: 'Show 3 (01:00 PM)', time: '13:00' },
+            { key: 's14', label: 'Show 4 (02:00 PM)', time: '14:00' },
+            { key: 's16', label: 'Show 5 (04:00 PM)', time: '16:00' },
+            { key: 's18', label: 'Show 6 (06:00 PM)', time: '18:00' },
+            { key: 's19', label: 'Show 7 (07:00 PM)', time: '19:00' },
+            { key: 's20', label: 'Show 8 (08:00 PM)', time: '20:00' },
+        ];
+
+        const statusEl = document.getElementById('status');
+        const wrapper = document.getElementById('shows-wrapper');
+        const saveBtn = document.getElementById('save-btn');
+
+        // Set today's date by default
+        (function setToday() {
+            const dateEl = document.getElementById('date');
+            if (!dateEl.value) {
+                const t = new Date();
+                const yyyy = t.getFullYear();
+                const mm = String(t.getMonth() + 1).padStart(2, '0');
+                const dd = String(t.getDate()).padStart(2, '0');
+                dateEl.value = `${yyyy}-${mm}-${dd}`;
+            }
+            // load existing Kerala for that date
+            loadKerala();
+        })();
+
+        // Build inputs for shows (3 digits)
+        function buildShowInputs() {
+            wrapper.innerHTML = '';
+            shows.forEach(s => {
+                const card = document.createElement('div');
+                card.className = 'show-card';
+
+                const label = document.createElement('div');
+                label.className = 'show-label';
+                label.textContent = s.label;
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'show-input';
+                input.id = `show-input-${s.key}`;
+                input.inputMode = 'numeric';
+                input.autocomplete = 'off';
+                input.maxLength = 3;
+                input.placeholder = '---';
+
+                input.addEventListener('input', () => {
+                    const digits = input.value.replace(/\D/g, '').slice(0, 3);
+                    input.value = digits;
+                });
+
+                card.appendChild(label);
+                card.appendChild(input);
+                wrapper.appendChild(card);
+            });
+        }
+        buildShowInputs();
+
+        // Save SHOWS (push items under results/<date>)
+        saveBtn.addEventListener('click', async () => {
+            const date = document.getElementById('date').value;
+            if (!date) return toast('❌ Please select a date.', 'red');
+
+            const payloads = [];
+            shows.forEach(s => {
+                const val = document.getElementById(`show-input-${s.key}`).value.trim();
+                if (val.length === 3) payloads.push({ time: s.time, number: val });
+            });
+
+            if (!payloads.length) return toast('❌ Enter at least one 3‑digit number.', 'red');
+
+            saveBtn.disabled = true; toast('Saving…', '#111827');
+            try {
+                const writes = payloads.map(p => db.ref('results/' + date).push({ ...p, ts: Date.now() }));
+                await Promise.all(writes);
+                toast(`✅ Saved ${payloads.length} show(s) successfully!`, 'green');
+                payloads.forEach(p => {
+                    const found = shows.find(x => x.time === p.time);
+                    if (found) document.getElementById(`show-input-${found.key}`).value = '';
+                });
+            } catch (e) {
+                toast('❌ Error: ' + e.message, 'red');
+            } finally {
+                saveBtn.disabled = false;
+            }
+        });
+
+        // ====== Kerala 5-digit (overwriteable) ======
+        const keralaInput = document.getElementById('kerala-input');
+        const keralaBtn = document.getElementById('save-kerala-btn');
+        const keralaStatus = document.getElementById('kerala-status');
+
+        // numeric guard 5 digits
+        keralaInput.addEventListener('input', () => {
+            keralaInput.value = keralaInput.value.replace(/\D/g, '').slice(0, 6);
+        });
+
+        async function loadKerala() {
+            keralaStatus.textContent = 'Loading…';
+            keralaStatus.style.color = '#111827';
+            const date = document.getElementById('date').value;
+            try {
+                const snap = await db.ref('results/' + date + '/kerala').get();
+                keralaInput.value = snap.exists() ? (snap.val() || '') : '';
+                keralaStatus.textContent = snap.exists() ? 'Loaded' : 'No value';
+                keralaStatus.style.color = snap.exists() ? 'green' : '#6b7280';
+            } catch (e) {
+                keralaStatus.textContent = 'Load failed';
+                keralaStatus.style.color = 'red';
+            }
+        }
+
+        keralaBtn.addEventListener('click', async () => {
+            const date = document.getElementById('date').value;
+            if (!date) return toastKerala('❌ Select a date.', 'red');
+            const val = keralaInput.value.trim();
+            if (val.length !== 6) return toastKerala('❌ Enter 6 digits.', 'red');
+
+            keralaBtn.disabled = true; toastKerala('Saving…', '#111827');
+            try {
+                await db.ref('results/' + date + '/kerala').set(val); // overwrite for the day
+                toastKerala('✅ Kerala saved.', 'green');
+            } catch (e) {
+                toastKerala('❌ ' + e.message, 'red');
+            } finally {
+                keralaBtn.disabled = false;
+            }
+        });
+
+        // change date → reload Kerala
+        document.getElementById('date').addEventListener('change', loadKerala);
+
+        function toast(msg, color) { statusEl.textContent = msg; statusEl.style.color = color; }
+        function toastKerala(msg, color) { keralaStatus.textContent = msg; keralaStatus.style.color = color; }
+    </script>
+</body>
+
+</html>

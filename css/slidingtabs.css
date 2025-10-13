@@ -1,0 +1,86 @@
+#scroller-header {
+	height:24px;
+	font-weight:700;
+	padding: 0px;
+	padding-top: 20px;
+	width:940px;
+	background-color:transparent !important;
+	margin:auto;
+}
+#scroller-header a {
+	text-decoration:none;
+	color:#867863;
+}
+#scroller-header a:hover {
+	text-decoration:none;
+	color:#4b412f;
+}
+#scroller-header ul li a:link, #scroller-header ul li a:visited  {
+	font-family:Arial, Helvetica, sans-serif !important;
+	font-weight:normal;
+	font-size:12px !important;
+	text-decoration:none !important;
+	line-height:20px;
+	height: 20px;
+	display:block;
+	background-color:none !important;
+	color:#000 !important;
+	padding-bottom:10px;
+	font-weight: bold;
+}
+#scroller-header ul li a.selected {
+	font-family:Arial, Helvetica, sans-serif !important;
+	font-weight:normal;
+	color:#9F0 !important;
+	background-image: url(../images/pointer.html);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	padding-bottom:10px;
+	font-weight: bold;
+}
+#scroller-header ul {
+	list-style-type: none;
+	width:100%;
+	text-align: center;
+}
+#scroller-header ul li {
+	height: 30px;
+	padding-right:25px;
+	margin-bottom:6px;
+	display: inline;
+	float:left;
+	position:relative;
+	top:-20px;
+}
+#scroller-table {
+	display: table;   /* Allow the centering to work */
+	margin: auto;
+}
+#scroller-body {
+	width:950px;
+	overflow:hidden;
+	padding:0px !important;
+	margin:auto;
+}
+#mask {
+	width:960px;
+	overflow:hidden;
+	background-color: #fff;
+	padding:0px;
+	margin:0px;
+}
+#panel {
+	font-family:Arial, Helvetica, sans-serif !important;
+	width: 930px;
+	padding:0px !important;
+	margin:0px !important;
+	line-height: 20px;
+}
+#panel div.panel {
+	float:left !important;
+	width:930px !important;
+	padding:0px;
+	padding-left:15px;
+	padding-right:15px;
+	margin:auto;
+}

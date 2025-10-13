@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JACKPOT-COM · Admin Login</title>
+
+  <!-- ❗ Remove legacy/compat scripts. Use only ES modules for Firebase v12+ -->
+  <style>
+    ul#saturday{margin:0;padding:0;list-style:none;width:auto;position:relative;display:block;height:36px;text-transform:uppercase;font-size:12px;font-weight:bold;background:transparent url("img/bgOFF.gif") repeat-x top left;font-family:Helvetica,Arial,Verdana,sans-serif;border-bottom:4px solid #336666;border-top:1px solid #C0E2D4}
+    ul#saturday li{display:block;float:left;margin:0;padding:0}
+    ul#saturday li a{display:block;float:left;color:#874B46;text-decoration:none;padding:12px 20px 0 20px;height:24px;background:transparent url("img/bgDIVIDER.gif") no-repeat top right}
+    ul#saturday li a:hover{background:transparent url("img/bgHOVER.gif") no-repeat top right}
+    ul#saturday li a.current,ul#saturday li a.current:hover{color:#fff;background:transparent url("img/bgON.gif") no-repeat top right}
+
+    body{font-family:"Lucida Grande","bitstream vera sans","trebuchet ms",sans-serif,verdana;background-image:url("img/innerwrapbg3.jpg");background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-position:center;margin:0}
+
+    .login-wrap{display:grid;place-items:center;min-height:100dvh;padding:24px}
+    .login-box{background:#fff;padding:28px 24px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.15);width:min(360px,92vw);text-align:center}
+    .login-box h2{margin:0 0 16px;color:#009130;letter-spacing:.3px}
+    .field{margin:10px 0}
+    .field input{width:100%;padding:12px 12px;border:1px solid #d4d7dc;border-radius:8px;font-size:15px}
+    .btn{width:100%;padding:12px;border:0;border-radius:8px;background:#ff6600;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+    .btn:hover{background:#02b863}
+    .error{color:#c02424;font-size:14px;min-height:20px;margin-top:8px}
+
+    header img{width:100%;height:120px;object-fit:cover;display:block}
+    nav{display:flex;justify-content:center}
+  </style>
+</head>
+<body>
+  <!-- HEADER (static; no onload handlers that can loop) -->
+  <header>
+    <img src="img/top1.png" alt="Header" />
+    <nav>
+      <ul id="saturday">
+        <li><a href="/" title="Home">Home</a></li>
+        <li><a href="result.html" title="Today Result">Today Result</a></li>
+        <li><a href="resultdownload.html" title="Download Result">Download Result</a></li>
+        <li><a href="#" title="">Schemes</a></li>
+        <li><a href="#" title="">Contact us</a></li>
+        <li><a href="chart.html" title="">Chart</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="login-wrap">
+    <section class="login-box" aria-labelledby="loginTitle">
+      <h2 id="loginTitle">Admin Login</h2>
+      <div class="field"><input type="email" id="email" placeholder="Email" autocomplete="username" required /></div>
+      <div class="field"><input type="password" id="password" placeholder="Password" autocomplete="current-password" required /></div>
+      <button class="btn" id="login-btn" type="button">Login</button>
+      <div id="error-message" class="error" role="alert" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- Firebase v12 (ES Modules only) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+    // ✅ Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNl9NMqKrmYqY9WPG-v-jAFbiv5d-vef8",
+      authDomain: "jackspot-bd84f.firebaseapp.com",
+      databaseURL: "https://jackspot-bd84f-default-rtdb.firebaseio.com",
+      projectId: "jackspot-bd84f",
+      storageBucket: "jackspot-bd84f.firebasestorage.app",
+      messagingSenderId: "740333832481",
+      appId: "1:740333832481:web:89c6c084af318ed1c01660",
+      measurementId: "G-H4QH4TR65X"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const $ = (id) => document.getElementById(id);
+    const emailEl = $("email");
+    const passEl = $("password");
+    const errorEl = $("error-message");
+    const btn = $("login-btn");
+
+    // If already logged in, go straight to admin
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.replace("admin.html");
+      }
+    });
+
+    btn.addEventListener("click", async () => {
+      errorEl.textContent = "";
+      btn.disabled = true;
+      btn.textContent = "Signing in...";
+      try {
+        const email = emailEl.value.trim();
+        const password = passEl.value.trim();
+        if (!email || !password) throw new Error("Enter email and password.");
+        await signInWithEmailAndPassword(auth, email, password);
+        // onAuthStateChanged will redirect
+      } catch (err) {
+        // Show cleaner message
+        errorEl.textContent = err?.message || "Login failed. Please try again.";
+        btn.disabled = false;
+        btn.textContent = "Login";
+      }
+    });
+  </script>
+
+  <!-- Notes:
+    - Do NOT include compat builds or custom auth.js here. They may cause redirect loops on GitHub Pages.
+    - Use .html extensions in nav links so GitHub Pages resolves them.
+  -->
+</body>
+</html>

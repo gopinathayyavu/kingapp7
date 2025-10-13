@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>JACKPOT-COM</title>
+
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <!-- Your existing libs (kept) -->
+  <script src="js/jquery.tools.min.js"></script>
+  <link href="css/slidingtabs.css" rel="stylesheet" type="text/css" />
+  <link href="css/easySlider.css" rel="stylesheet" type="text/css" />
+  <script src="js/jquery.scrollTo.js"></script>
+  <script src="js/slidingtabs.js"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    /* ===== Page basics ===== */
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #fff url("img/innerwrapbg3.jpg") no-repeat fixed center/cover;
+    }
+
+    /* ===== Fixed header (unchanged structure) ===== */
+    form[name="timeform"] {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 1000;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    form[name="timeform"] table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    /* ===== Nav (kept) ===== */
+    ul#saturday {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: block;
+      height: 36px;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: bold;
+      background: transparent url("img/bgOFF.gif") repeat-x top left;
+      font-family: Helvetica, Arial, Verdana, sans-serif;
+      border-bottom: 4px solid #336666;
+      border-top: 1px solid #C0E2D4;
+    }
+
+    ul#saturday li {
+      float: left
+    }
+
+    ul#saturday li a {
+      display: block;
+      color: #874B46;
+      text-decoration: none;
+      padding: 12px 20px 0;
+      height: 24px;
+      background: transparent url("img/bgDIVIDER.gif") no-repeat top right;
+    }
+
+    ul#saturday li a:hover {
+      background: transparent url("img/bgHOVER.gif") no-repeat top right
+    }
+
+    ul#saturday li a.current,
+    ul#saturday li a.current:hover {
+      color: #fff;
+      background: transparent url("img/bgON.gif") no-repeat top right
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px
+    }
+
+    /* ===== Filter strip (simple) ===== */
+    .filter-box {
+      width: 1080px;
+      margin: 0 auto 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #f6f6f6;
+    }
+
+    .filter-box strong {
+      font-size: 14px
+    }
+
+    .filter-box input[type="month"] {
+      padding: 3px 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px
+    }
+
+    .filter-box button {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 0;
+      background: #2563eb;
+      color: #fff;
+      cursor: pointer
+    }
+
+    /* ===== EXACT TABLE THEME ===== */
+    #captureBox {
+      width: 1080px;
+      margin: 0 auto;
+    }
+
+    table.month-chart {
+      width: 1080px;
+      /* hard lock total width */
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: #fff;
+      border: 2px solid #000;
+      /* outer strong outline */
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Column plan -> sums to 1080 (matches your screenshot feel)
+       80 | 112 | 8×111  */
+    /* Applied via <colgroup> in markup */
+
+    /* Grid cells */
+    .month-chart th,
+    .month-chart td {
+      height: 23px;
+      /* padding: 1px 3px; */
+      font-size: 20px;
+      line-height: 1;
+      text-align: center;
+      vertical-align: middle;
+      border: 1px solid #000;
+      color: #000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+      position: relative;
+    }
+
+    /* Top deep green banner */
+    .top-banner th {
+      background: #0f7a3a;
+      color: #fff;
+      font-weight: 700;
+      border-color: #000;
+    }
+
+    /* Top-left month number cell (blue) */
+    #monthNumber {
+      background: #2e75b6 !important;
+      color: #fff !important;
+      font-weight: 700;
+    }
+
+    /* Second header row */
+    .month-head {
+      background: #2e75b6 !important;
+      color: #fff !important;
+      font-weight: 700;
+    }
+
+    .time-head {
+      background: #fbe4d4 !important;
+      color: #c00000 !important;
+      font-weight: 700;
+    }
+
+    .kerala-head {
+      background: #fff !important;
+      color: #1f4e79 !important;
+      font-weight: 700;
+    }
+
+    /* Left Date column (peach + red) */
+    .date-col {
+      background: #fbe4d4 !important;
+      color: #c00000 !important;
+      font-weight: 700;
+    }
+
+    /* Kerala vertical band (light red with thicker red borders) */
+    thead th:nth-child(6) {
+      border-left: 2px solid #c00000 !important;
+      border-right: 2px solid #c00000 !important;
+    }
+
+    tbody td:nth-child(6) {
+      background: #fde5de !important;
+      color: #c00000 !important;
+      font-weight: 700;
+      border-left: 2px solid #c00000 !important;
+      border-right: 2px solid #c00000 !important;
+    }
+
+    /* Body numbers (green) except Date & Kerala */
+    tbody td {
+      color: #007a00;
+      font-weight: 700;
+    }
+
+    tbody td:nth-child(1),
+    tbody td:nth-child(6) {
+      color: inherit;
+    }
+
+    .month-chart tbody td:not(:nth-child(1)):not(:nth-child(6)):not(:empty)::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-top: 10px solid green;
+      border-right: 10px solid transparent;
+    }
+
+
+    /* tbody tr:nth-child(even) td:not(:nth-child(6)),
+    tbody tr:nth-child(odd) td:not(:nth-child(6)) {
+      background: #fff !important;
+    } */
+
+    :root {
+      --btn-bg-1: #6ee7f9;
+      --btn-bg-2: #3b82f6;
+      --btn-text: #0b1220;
+      --btn-glow: #60a5fa;
+      --btn-shadow: rgba(59, 130, 246, .5)
+    }
+
+    .btn-download {
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .8rem 1.05rem;
+      border: none;
+      border-radius: 14px;
+      font: 600 .95rem/1 system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--btn-text);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .25), rgba(255, 255, 255, .05)) padding-box,
+        linear-gradient(135deg, var(--btn-bg-1), var(--btn-bg-2)) border-box;
+      border: 2px solid transparent;
+      box-shadow: 0 8px 24px -8px var(--btn-shadow), inset 0 0 0 1px rgba(255, 255, 255, .25);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .btn-download .icon {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      display: inline-block
+    }
+
+    .btn-download .icon::before,
+    .btn-download .icon::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background: currentColor
+    }
+
+    .btn-download .icon::before {
+      top: 2px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-top: 8px solid currentColor;
+      background: none
+    }
+
+    .btn-download .icon::after {
+      bottom: 1px;
+      width: 16px;
+      height: 3px;
+      border-radius: 2px
+    }
+  </style>
+</head>
+
+<body style="text-align:center">
+  <!-- HEADER -->
+  <form name="timeform">
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th scope="col"><img src="img/top1.png" width="100%" height="120" alt="Header" /></th>
+      </tr>
+      <tr align="center">
+        <td>
+          <ul id="saturday">
+            <li><a href="index" title="Home">Home</a></li>
+            <li><a href="result" title="Today Result">Today Result</a></li>
+            <li><a href="resultdownload" title="Download Result">Download Result</a></li>
+            <li><a href="#" title="">Schemes</a></li>
+            <li><a href="#" title="">Contact us</a></li>
+            <li><a href="chart" title="">Chart</a></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <div class="wrap">
+    <div class="filter-box">
+      <strong>Monthly Chart</strong>
+      <div class="controls">
+        <label>Month: <input type="month" id="monthPicker"></label>
+        <button id="loadBtn" type="button">Load</button>
+      </div>
+    </div>
+
+    <div id="captureBox" class="download-chart">
+      <table class="month-chart">
+        <!-- Widths sum to 1080px exactly -->
+        <colgroup>
+          <col style="width:80px"> <!-- Date / Month column -->
+          <col style="width:112px"> <!-- 11AM -->
+          <col style="width:111px"> <!-- 12PM -->
+          <col style="width:111px"> <!-- 01PM -->
+          <col style="width:111px"> <!-- 02PM -->
+          <col style="width:111px"> <!-- Kerala -->
+          <col style="width:111px"> <!-- 04PM -->
+          <col style="width:111px"> <!-- 06PM -->
+          <col style="width:111px"> <!-- 07PM -->
+          <col style="width:111px"> <!-- 08PM -->
+        </colgroup>
+        <thead>
+          <tr class="top-banner">
+            <th id="monthNumber"></th>
+            <th colspan="9" style="text-align: le;">spot + Kerala</th>
+          </tr>
+          <tr>
+            <th class="month-head" id="monthAbbr">AUG</th>
+            <th class="time-head">11AM</th>
+            <th class="time-head">12PM</th>
+            <th class="time-head">01PM</th>
+            <th class="time-head">02PM</th>
+            <th class="kerala-head">Kerala</th>
+            <th class="time-head">04PM</th>
+            <th class="time-head">06PM</th>
+            <th class="time-head">07PM</th>
+            <th class="time-head">08PM</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <br>
+    </div>
+
+    <button id="downloadBtn" type="button" class="btn-download">
+      <span class="icon" aria-hidden="true"></span>
+      <span class="label">Download Image</span>
+    </button>
+  </div>
+
+  <script>
+    /* button ripple */
+    const btn = document.getElementById('downloadBtn');
+    btn.addEventListener('pointermove', e => {
+      const r = btn.getBoundingClientRect();
+      btn.style.setProperty('--x', (e.clientX - r.left) + 'px');
+      btn.style.setProperty('--y', (e.clientY - r.top) + 'px');
+    });
+  </script>
+
+  <!-- Pixel-exact export (1080px wide, no scaling) -->
+  <script>
+    (() => {
+      const BUTTON_ID = 'downloadBtn';
+      const CAPTURE_SELECTOR = '#captureBox';
+      const FILENAME_PREFIX = 'monthly-chart-';
+      const BG_COLOR = '#ffffff';
+      const TARGET_WIDTH = 1080;
+
+      const CDNS = {
+        htmlToImage: [
+          'https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.umd.js',
+          'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.umd.js'
+        ],
+        domToImage: [
+          'https://unpkg.com/dom-to-image-more@3.2.0/dist/dom-to-image-more.min.js',
+          'https://cdn.jsdelivr.net/npm/dom-to-image-more@3.2.0/dist/dom-to-image-more.min.js'
+        ]
+      };
+
+      function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+      function loadScriptOnce(src) {
+        return new Promise((resolve, reject) => {
+          if ([...document.scripts].some(s => s.src === src)) return resolve(true);
+          const s = document.createElement('script');
+          s.src = src; s.async = true; s.crossOrigin = 'anonymous';
+          s.onload = () => resolve(true);
+          s.onerror = () => reject(new Error('Failed ' + src));
+          document.head.appendChild(s);
+        });
+      }
+      async function ensureCaptureLib() {
+        if (window.htmlToImage?.toPng) return 'htmlToImage';
+        if (window.domtoimage?.toPng) return 'domtoimage';
+        for (const src of CDNS.htmlToImage) { try { await loadScriptOnce(src); await sleep(30); if (window.htmlToImage?.toPng) return 'htmlToImage'; } catch { } }
+        for (const src of CDNS.domToImage) { try { await loadScriptOnce(src); await sleep(30); if (window.domtoimage?.toPng) return 'domtoimage'; } catch { } }
+        throw new Error('No capture library available');
+      }
+      async function waitForFonts() {
+        if (document.fonts && document.fonts.status !== 'loaded') {
+          try { await document.fonts.ready; } catch { }
+        }
+      }
+      const rAF = () => new Promise(r => requestAnimationFrame(r));
+
+      function buildStage(node) {
+        const stage = document.createElement('div');
+        stage.style.position = 'fixed';
+        stage.style.left = '-10000px';
+        stage.style.top = '-10000px';
+        stage.style.width = TARGET_WIDTH + 'px';
+        stage.style.background = BG_COLOR;
+        stage.style.overflow = 'hidden';
+        stage.style.pointerEvents = 'none';
+
+        const clone = node.cloneNode(true);
+        clone.style.margin = '0';
+        const cloneTable = clone.querySelector('.month-chart');
+        if (cloneTable) { cloneTable.style.width = TARGET_WIDTH + 'px'; }
+
+        stage.appendChild(clone);
+        document.body.appendChild(stage);
+        return { stage, clone };
+      }
+
+      async function layoutAndMeasure(clone, stage) {
+        await rAF();
+        const ch = clone.scrollHeight || clone.getBoundingClientRect().height || 1;
+        stage.style.height = Math.ceil(ch) + 'px';
+        return { scaledHeight: Math.ceil(ch) };
+      }
+
+      function destroyStage(stage) { try { document.body.removeChild(stage); } catch { } }
+      function getMonthText() { return (document.getElementById('monthAbbr')?.textContent || 'MONTH').trim(); }
+
+      async function exportNow() {
+        const node = document.querySelector(CAPTURE_SELECTOR);
+        if (!node) { alert('Capture area not found.'); return; }
+
+        const lib = await ensureCaptureLib();
+        await waitForFonts();
+
+        const { stage, clone } = buildStage(node);
+        try {
+          const { scaledHeight } = await layoutAndMeasure(clone, stage);
+
+          const opts = {
+            width: TARGET_WIDTH,
+            height: scaledHeight,
+            pixelRatio: 1,  // 1:1 pixels
+            cacheBust: true,
+            backgroundColor: BG_COLOR,
+            bgcolor: BG_COLOR
+          };
+
+          let dataUrl;
+          if (lib === 'htmlToImage') {
+            dataUrl = await window.htmlToImage.toPng(stage, opts);
+          } else {
+            dataUrl = await window.domtoimage.toPng(stage, opts);
+          }
+
+          const a = document.createElement('a');
+          a.download = `${FILENAME_PREFIX}${getMonthText()}.png`;
+          a.href = dataUrl;
+          a.click();
+        } catch (err) {
+          console.error('Export failed:', err);
+          alert('Export failed. See console for details.');
+        } finally {
+          destroyStage(stage);
+        }
+      }
+
+      function ready(fn) { document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn); }
+      ready(() => { const b = document.getElementById(BUTTON_ID); if (b) b.addEventListener('click', exportNow); });
+    })();
+  </script>
+
+  <!-- Firebase init -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNl9NMqKrmYqY9WPG-v-jAFbiv5d-vef8",
+      authDomain: "jackspot-bd84f.firebaseapp.com",
+      databaseURL: "https://jackspot-bd84f-default-rtdb.firebaseio.com",
+      projectId: "jackspot-bd84f",
+      storageBucket: "jackspot-bd84f.firebasestorage.app",
+      messagingSenderId: "740333832481",
+      appId: "1:740333832481:web:89c6c084af318ed1c01660",
+      measurementId: "G-H4QH4TR65X"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+  </script>
+
+  <!-- Header padding sync -->
+  <script>
+    function syncBodyPaddingToHeader() {
+      const header = document.querySelector('form[name="timeform"]');
+      if (!header) return;
+      document.body.style.paddingTop = header.offsetHeight + 'px';
+    }
+    window.addEventListener('load', syncBodyPaddingToHeader);
+    window.addEventListener('resize', syncBodyPaddingToHeader);
+    const headerImg = document.querySelector('form[name="timeform"] img');
+    if (headerImg) { headerImg.addEventListener('load', syncBodyPaddingToHeader); }
+  </script>
+
+  <!-- Page logic (unchanged) -->
+  <script>
+    const timeCols = ["11:00", "12:00", "13:00", "14:00", "16:00", "18:00", "19:00", "20:00"];
+    const tbody = document.getElementById('tbody');
+    const monthPicker = document.getElementById('monthPicker');
+    const loadBtn = document.getElementById('loadBtn');
+    const monthAbbr = document.getElementById('monthAbbr');
+    const monthNumberCell = document.getElementById('monthNumber');
+
+    (function setDefaultMonth() {
+      const d = new Date();
+      const m = d.getMonth() + 1;
+      monthPicker.value = `${d.getFullYear()}-${String(m).padStart(2, "0")}`;
+      monthAbbr.textContent = d.toLocaleString('en', { month: 'short' }).toUpperCase();
+      monthNumberCell.textContent = m;  // shows "8" for August
+      loadMonth();
+    })();
+
+    loadBtn.addEventListener('click', () => {
+      const dt = new Date(monthPicker.value + "-01");
+      monthAbbr.textContent = dt.toLocaleString('en', { month: 'short' }).toUpperCase();
+      monthNumberCell.textContent = dt.getMonth() + 1;
+      loadMonth();
+    });
+
+    function shouldShow(dateStr, timeStr) {
+      const now = new Date();
+      const [y, m, d] = dateStr.split('-').map(n => parseInt(n, 10));
+      const [hh, mm] = timeStr.split(':').map(n => parseInt(n, 10));
+      const slot = new Date(y, m - 1, d, hh, mm, 0, 0);
+      const todayStr = new Date().toISOString().slice(0, 10);
+      if (dateStr < todayStr) return true;
+      if (dateStr > todayStr) return false;
+      return now >= slot;
+    }
+
+    async function loadMonth() {
+      tbody.innerHTML = "";
+      const [yearStr, monthStr] = monthPicker.value.split("-");
+      const year = parseInt(yearStr, 10);
+      const month = parseInt(monthStr, 10);
+      const daysInMonth = new Date(year, month, 0).getDate();
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const { latestByTime, kerala } = await readDate(dateStr);
+
+        const tr = document.createElement('tr');
+
+        const cDay = document.createElement('td');
+        cDay.textContent = day; cDay.className = 'date-col';
+        tr.appendChild(cDay);
+
+        for (let i = 0; i < 4; i++) {
+          const t = timeCols[i];
+          const txt = shouldShow(dateStr, t) ? (latestByTime[t] || "") : "";
+          tr.appendChild(cell(txt));
+        }
+
+        const k = document.createElement('td');
+        k.textContent = kerala || "";
+        tr.appendChild(k);
+
+        for (let i = 4; i < timeCols.length; i++) {
+          const t = timeCols[i];
+          const txt = shouldShow(dateStr, t) ? (latestByTime[t] || "") : "";
+          tr.appendChild(cell(txt));
+        }
+
+        tbody.appendChild(tr);
+      }
+    }
+
+    function cell(txt) { const td = document.createElement('td'); td.textContent = txt || ""; return td; }
+
+    async function readDate(dateStr) {
+      const snap = await db.ref('results/' + dateStr).get();
+      const latestByTime = {}; let kerala = "";
+      if (snap.exists()) {
+        const val = snap.val();
+        if (val.kerala) kerala = val.kerala;
+        Object.keys(val).forEach(k => {
+          if (k === 'kerala') return;
+          const item = val[k];
+          if (!item || !item.time) return;
+          const t = item.time;
+          const isNewer = !latestByTime[t] || (item.ts && item.ts > latestByTime[t].ts);
+          if (isNewer) latestByTime[t] = { num: item.number, ts: item.ts || 0 };
+        });
+      }
+      Object.keys(latestByTime).forEach(t => { latestByTime[t] = latestByTime[t].num; });
+      return { latestByTime, kerala };
+    }
+  </script>
+</body>
+
+</html>
