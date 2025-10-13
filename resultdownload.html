@@ -3,149 +3,245 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>JACKPOT-COM</title>
+    <title>KingApp7</title>
 
-    <!-- Keep your look & feel -->
-    <link href="css/slidingtabs.css" rel="stylesheet" type="text/css" />
-    <link href="css/easySlider.css" rel="stylesheet" type="text/css" />
+    <style>
+        :root {
+            /* 🔧 Set your background image path here */
+            --bg: url('img/bg-img.png');
 
-    <style type="text/css">
-        ul#saturday {
-            margin: 0;
-            padding: 0;
-            list-style-type: none;
-            width: auto;
-            position: relative;
-            display: block;
-            height: 36px;
-            text-transform: uppercase;
-            font-size: 12px;
-            font-weight: bold;
-            background: transparent url("img/bgOFF.gif") repeat-x top left;
-            font-family: Helvetica, Arial, Verdana, sans-serif;
-            border-bottom: 4px solid #336666;
-            border-top: 1px solid #C0E2D4;
+            /* Light lottery palette (no animations) */
+            --ink: #1a1a1a;
+            --muted: #5c5c5c;
+            --gold: #f7c948;
+            --gold-deep: #e3a600;
+            --red: #e53935;
+            --red-deep: #c62828;
+
+            --glass: rgba(255, 255, 255, .88);
+            --glass-strong: rgba(255, 255, 255, .96);
+            --glass-brd: rgba(0, 0, 0, .10);
+            --shadow: 0 10px 28px rgba(0, 0, 0, .12);
+            --r-lg: 18px;
+            --r-md: 12px;
         }
 
-        ul#saturday li {
-            display: block;
-            float: left;
-            margin: 0;
-            padding: 0;
+        * {
+            box-sizing: border-box
         }
 
-        ul#saturday li a {
-            display: block;
-            float: left;
-            color: #874B46;
-            text-decoration: none;
-            padding: 12px 20px 0 20px;
-            height: 24px;
-            background: transparent url("img/bgDIVIDER.gif") no-repeat top right;
-        }
-
-        ul#saturday li a:hover {
-            background: transparent url("img/bgHOVER.gif") no-repeat top right;
-        }
-
-        ul#saturday li a.current,
-        ul#saturday li a.current:hover {
-            color: #fff;
-            background: transparent url("img/bgON.gif") no-repeat top right;
-        }
-
+        html,
         body {
-            font-family: "Lucida Grande", "bitstream vera sans", "trebuchet ms", sans-serif, verdana;
-            background-image: url("img/innerwrapbg3.jpg");
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
             margin: 0;
+            padding: 0;
+            color: var(--ink);
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
-        a:active {
-            outline: none;
-        }
-
-        :focus {
-            outline-style: none;
-            -moz-outline-style: none;
-        }
-
-        .textbox {
-            background: none;
-            color: #874B46;
-            border: none;
-            cursor: default;
-            font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+        /* Full-page responsive background image */
+        body {
             text-align: center;
-            font-size: 20px;
+            background-image: var(--bg);
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            min-height: 100dvh;
         }
 
-        .label1 {
-            background: none;
-            color: #000;
-            border: none;
-            cursor: default;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 15px;
-            height: 24px;
+        /* ===== Page header (added) ===== */
+        header {
+            position: relative;
+            z-index: 2;
+            height: 86px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* background:linear-gradient(180deg, var(--glass-strong), rgba(255,255,255,.88)); */
+            border-bottom: 1px solid var(--glass-brd);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(6px);
         }
 
-        .table1 {
-            background: none;
-            border: none;
-            color: none;
+        header h1 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 1000;
+            font-size: clamp(24px, 4vw, 36px);
+            background: linear-gradient(135deg, #8d5c00, #ffdb7a 35%, #fff3c4 55%, #e2a700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, .85);
         }
 
-        /* Results table (hidden until search) */
+        /* ===== Top nav (your <ul id="saturday">) ===== */
+        #saturday {
+            list-style: none;
+            margin: 12px auto 0;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass);
+            border-radius: var(--r-lg);
+            width: min(1200px, 94vw);
+            border: 1px solid var(--glass-brd);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(6px);
+        }
+
+        #saturday>li {
+            display: flex;
+            align-items: center;
+        }
+
+        #saturday a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            padding: 0 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 900;
+            color: white;
+            background: linear-gradient(180deg, #30b760, #57534a);
+            /* border: 1px solid rgba(230, 164, 0, .35); */
+            box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(247, 201, 72, .16);
+        }
+
+        #saturday a:hover {
+            color: #7a0f0d;
+            background: linear-gradient(180deg, #ffe5e2, #ffd0cc);
+            border-color: rgba(229, 57, 53, .35);
+            box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(229, 57, 53, .16);
+        }
+
+        /* ===== Date range form ===== */
+        #frm_getfile {
+            background: var(--glass);
+            border: 1px solid var(--glass-brd);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(6px);
+            padding: 14px 16px;
+            width: min(700px, 94vw);
+        }
+
+        #frm_getfile p {
+            margin: 8px 0;
+            color: #7a5a12;
+            font-weight: 900;
+        }
+
+        #frm_getfile input[type="date"] {
+            width: 180px;
+            height: 38px;
+            padding: 0 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, .12);
+            background: linear-gradient(180deg, #ffffff, #f6f6f6);
+            color: #1a1a1a;
+            font-weight: 600;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, .06);
+        }
+
+        .input-button {
+            margin-top: 6px;
+            height: 42px;
+            padding: 0 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(230, 164, 0, .35);
+            background: linear-gradient(180deg, #fff9e9, #ffe1a8);
+            color: #6b4b00;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(247, 201, 72, .16);
+        }
+
+        .input-button:hover {
+            background: linear-gradient(180deg, #ffe5e2, #ffd0cc);
+            color: #7a0f0d;
+            border-color: rgba(229, 57, 53, .35);
+        }
+
+        /* ===== Results table ===== */
         #download-results-wrap {
-            width: 96%;
-            margin: 10px auto 40px;
-            display: none;
+            margin: 14px auto 22px;
+            width: min(1200px, 96vw);
+            background: var(--glass);
+            border: 1px solid var(--glass-brd);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(6px);
+            overflow: hidden;
+        }
+
+        /* make the table scrollable on small screens */
+        #download-results-wrap {
+            overflow: auto;
         }
 
         #resultTable {
             width: 100%;
-            border-collapse: collapse;
-            font-family: Arial, sans-serif;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+            color: #1a1a1a;
+            min-width: 760px;
+            /* allow horizontal scroll on tiny screens */
         }
 
         #resultTable thead th {
-            background: #006599;
-            color: black;
-            padding: 10px;
-            border: 2px solid black;
-            font-weight: 700;
-            border-bottom: 2px solid rgba(0, 0, 0, 0.3);
-            text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(180deg, #fffdf6, #fff2cc);
+            color: #6b4b00;
+            text-align: center;
+            padding: 10px 8px;
+            border-bottom: 1px solid rgba(0, 0, 0, .08);
+            font-weight: 900;
         }
 
         #resultTable tbody td {
-            background: #ffd800;
-            color: #1a1a1a;
-            padding: 8px;
-            border: 2px solid black;
+            padding: 10px 8px;
             text-align: center;
-            font-weight: 600;
+            border-bottom: 1px solid rgba(0, 0, 0, .06);
+            font-weight: 700;
+            color: #2a2a2a;
         }
 
-        #resultTable tbody td:first-child,
-        #resultTable thead th:first-child {
-            width: 60px;
+        #resultTable tbody tr:nth-child(odd) {
+            background: rgba(255, 255, 255, .72);
         }
 
-        #resultTable tbody td:nth-child(2),
-        #resultTable thead th:nth-child(2) {
-            width: 140px;
+        #resultTable tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, .88);
         }
 
-        @media (max-width:900px) {
+        @media (max-width:720px) {
+            #saturday {
+                padding: 10px 8px;
+            }
 
-            #resultTable thead th,
-            #resultTable tbody td {
-                padding: 6px;
+            #saturday a {
+                height: 38px;
+                padding: 0 12px;
+            }
+
+            #frm_getfile {
+                padding: 12px
+            }
+
+            #frm_getfile input[type="date"] {
+                width: 160px;
+            }
+
+            #resultTable {
                 font-size: 13px;
             }
         }
@@ -153,12 +249,14 @@
 </head>
 
 <body style="text-align:center">
-    <!-- HEADER -->
+    <!-- Header bar -->
+    <header>
+        <h1>KingApp7</h1>
+    </header>
+
+    <!-- HEADER / NAV (kept structure) -->
     <form name="timeform">
         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <th scope="col"><img src="img/top1.png" width="100%" height="120" alt="Header" /></th>
-            </tr>
             <tr align="center">
                 <td>
                     <ul id="saturday">
@@ -168,34 +266,23 @@
                         <li><a href="#" title="">Schemes</a></li>
                         <li><a href="#" title="">Contact us</a></li>
                         <li><a href="chart" title="">Chart</a></li>
-                        <!-- <li>
-                            <b class="textbox" style="padding:10px 18px 0;height:24px;float:left;color:#874B46;">
-                                <span>DRAW TIME : </span><input type="text" id="displaytime1" name="displaytime1"
-                                    size="10" readonly class="textbox" value="11:00:00" />
-                                <span>&nbsp;&nbsp;TIME LEFT : </span><input type="text" id="displaytime2"
-                                    name="displaytime2" size="10" readonly class="textbox" value="00:00:00" />
-                            </b>
-                        </li> -->
                     </ul>
                 </td>
             </tr>
         </table>
     </form>
 
-    <!-- DATE RANGE FORM -->
+    <!-- DATE RANGE FORM (kept, just styled) -->
     <center>
         <form id="frm_getfile" name="frm_getfile" method="post" style="margin-top:10px;">
-            <p style="color:#009">Date: <input autocomplete="off" type="date" id="datepicker" name="datepicker" value=""
-                    style="width:180px;" /></p>
-            <p style="color:#009">To: <input autocomplete="off" type="date" id="datepicker1" name="datepicker1" value=""
-                    style="width:180px;" /></p>
-            <input name="Submit" type="submit" class="input-button" value="Result View"
-                style="background-color:#9F0;color:#0000FF;cursor:pointer;" />
+            <p>Date: <input autocomplete="off" type="date" id="datepicker" name="datepicker" value="" /></p>
+            <p>To: <input autocomplete="off" type="date" id="datepicker1" name="datepicker1" value="" /></p>
+            <input name="Submit" type="submit" class="input-button" value="Result View" />
         </form>
     </center>
 
-    <!-- RESULTS TABLE -->
-    <div id="download-results-wrap">
+    <!-- RESULTS TABLE (kept) -->
+    <div id="download-results-wrap" style="display:none;">
         <table id="resultTable">
             <thead>
                 <tr>
@@ -215,7 +302,7 @@
         </table>
     </div>
 
-    <!-- jQuery + jQuery UI -->
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Firebase (compat) -->
@@ -226,7 +313,7 @@
         (function () {
             'use strict';
 
-            // Firebase config
+            // Firebase config (kept)
             const firebaseConfig = {
                 apiKey: "AIzaSyBNl9NMqKrmYqY9WPG-v-jAFbiv5d-vef8",
                 authDomain: "jackspot-bd84f.firebaseapp.com",
@@ -240,7 +327,7 @@
             if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
             const db = firebase.database();
 
-            // IST helpers
+            // IST helpers (kept)
             function __nowIST() {
                 return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
             }
@@ -313,7 +400,7 @@
                 wrap.style.display = rows.length ? 'block' : 'none';
             }
 
-            // Form submit
+            // Form submit (kept)
             const form = document.getElementById('frm_getfile');
             if (form) {
                 form.addEventListener('submit', async function (e) {

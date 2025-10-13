@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>JACKPOT-COM</title>
+  <title>KingApp7</title>
 
   <!-- Firebase (compat) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -20,107 +20,167 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
-    /* ===== Page basics ===== */
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #fff url("img/innerwrapbg3.jpg") no-repeat fixed center/cover;
+    /* ===== Global lottery theme (background + palette) ===== */
+    :root {
+      /* 🔧 set your background image here */
+      --bg: url('img/bg-img.png');
+
+      --ink: #1a1a1a;
+      --muted: #5c5c5c;
+      --gold: #f7c948;
+      --gold-deep: #e3a600;
+      --red: #e53935;
+      --red-deep: #c62828;
+
+      --glass: rgba(255, 255, 255, .88);
+      --glass-strong: rgba(255, 255, 255, .96);
+      --glass-brd: rgba(0, 0, 0, .10);
+      --shadow: 0 10px 28px rgba(0, 0, 0, .12);
+      --r-lg: 18px;
+      --r-md: 12px;
     }
 
-    /* ===== Fixed header (unchanged structure) ===== */
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      color: var(--ink);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    /* Full-page responsive background image */
+    body {
+      text-align: center;
+      background-image: var(--bg);
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      min-height: 100dvh;
+    }
+
+    /* ===== Fixed header (kept structure; just themed) ===== */
     form[name="timeform"] {
       position: fixed;
       inset: 0 0 auto 0;
       z-index: 1000;
-      background: #fff;
-      border-bottom: 1px solid #ddd;
+      /* background: linear-gradient(180deg, var(--glass-strong), rgba(255, 255, 255, .88)); */
+      color: white;
+      border-bottom: 1px solid var(--glass-brd);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
     }
 
-    form[name="timeform"] table {
+    form[name="timeform"] {
       width: 100%;
       border-collapse: collapse
     }
 
-    /* ===== Nav (kept) ===== */
-    ul#saturday {
-      width: 100%;
-      margin: 0;
-      padding: 0;
+    /* ===== Nav (gold buttons, red hover) ===== */
+    #saturday {
       list-style: none;
-      display: block;
-      height: 36px;
-      text-transform: uppercase;
-      font-size: 12px;
-      font-weight: bold;
-      background: transparent url("img/bgOFF.gif") repeat-x top left;
-      font-family: Helvetica, Arial, Verdana, sans-serif;
-      border-bottom: 4px solid #336666;
-      border-top: 1px solid #C0E2D4;
+      margin: 12px auto 0;
+      margin-top: 10%;
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      background: var(--glass);
+      border-radius: var(--r-lg);
+      width: min(1200px, 94vw);
+      border: 1px solid var(--glass-brd);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
     }
 
-    ul#saturday li {
-      float: left
+    #saturday>li {
+      display: flex;
+      align-items: center;
     }
 
-    ul#saturday li a {
-      display: block;
-      color: #874B46;
+    #saturday a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 10px;
       text-decoration: none;
-      padding: 12px 20px 0;
-      height: 24px;
-      background: transparent url("img/bgDIVIDER.gif") no-repeat top right;
+      font-weight: 900;
+      color: white;
+      background: linear-gradient(180deg, #30b760, #57534a);
+      /* border: 1px solid rgba(230, 164, 0, .35); */
+      box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(247, 201, 72, .16);
     }
 
-    ul#saturday li a:hover {
-      background: transparent url("img/bgHOVER.gif") no-repeat top right
+    #saturday a:hover {
+      color: #7a0f0d;
+      background: linear-gradient(180deg, #ffe5e2, #ffd0cc);
+      border-color: rgba(229, 57, 53, .35);
+      box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(229, 57, 53, .16);
     }
 
-    ul#saturday li a.current,
-    ul#saturday li a.current:hover {
-      color: #fff;
-      background: transparent url("img/bgON.gif") no-repeat top right
-    }
-
+    /* ===== Content wrapper below the fixed header ===== */
     .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px
+      padding-top: 120px;
+      /* gets corrected by JS sync below */
     }
 
-    /* ===== Filter strip (simple) ===== */
+    /* ===== Filter strip (kept, just themed) ===== */
     .filter-box {
       width: 1080px;
+      max-width: 94vw;
       margin: 0 auto 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-      padding: 8px 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      background: #f6f6f6;
+      padding: 10px 12px;
+      border: 1px solid var(--glass-brd);
+      border-radius: var(--r-lg);
+      background: var(--glass);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
     }
 
     .filter-box strong {
-      font-size: 14px
+      font-size: 15px;
+      color: #6b4b00;
     }
 
     .filter-box input[type="month"] {
-      padding: 3px 6px;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px
+      padding: 6px 8px;
+      border: 1px solid rgba(0, 0, 0, .12);
+      border-radius: 10px;
+      background: linear-gradient(180deg, #ffffff, #f6f6f6);
+      color: #1a1a1a;
+      font-weight: 600;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, .06);
     }
 
     .filter-box button {
-      padding: 6px 10px;
-      border-radius: 6px;
-      border: 0;
-      background: #2563eb;
-      color: #fff;
-      cursor: pointer
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(230, 164, 0, .35);
+      background: linear-gradient(180deg, #fff9e9, #ffe1a8);
+      color: #6b4b00;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 #fff, 0 6px 14px rgba(247, 201, 72, .16);
     }
 
-    /* ===== EXACT TABLE THEME ===== */
+    .filter-box button:hover {
+      background: linear-gradient(180deg, #ffe5e2, #ffd0cc);
+      color: #7a0f0d;
+      border-color: rgba(229, 57, 53, .35);
+    }
+
+    /* ===== EXACT TABLE THEME (UNCHANGED) ===== */
     #captureBox {
       width: 1080px;
       margin: 0 auto;
@@ -128,24 +188,16 @@
 
     table.month-chart {
       width: 1080px;
-      /* hard lock total width */
       border-collapse: collapse;
       table-layout: fixed;
       background: #fff;
       border: 2px solid #000;
-      /* outer strong outline */
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* Column plan -> sums to 1080 (matches your screenshot feel)
-       80 | 112 | 8×111  */
-    /* Applied via <colgroup> in markup */
-
-    /* Grid cells */
     .month-chart th,
     .month-chart td {
       height: 23px;
-      /* padding: 1px 3px; */
       font-size: 20px;
       line-height: 1;
       text-align: center;
@@ -158,7 +210,6 @@
       position: relative;
     }
 
-    /* Top deep green banner */
     .top-banner th {
       background: #0f7a3a;
       color: #fff;
@@ -166,14 +217,12 @@
       border-color: #000;
     }
 
-    /* Top-left month number cell (blue) */
     #monthNumber {
       background: #2e75b6 !important;
       color: #fff !important;
       font-weight: 700;
     }
 
-    /* Second header row */
     .month-head {
       background: #2e75b6 !important;
       color: #fff !important;
@@ -192,14 +241,12 @@
       font-weight: 700;
     }
 
-    /* Left Date column (peach + red) */
     .date-col {
       background: #fbe4d4 !important;
       color: #c00000 !important;
       font-weight: 700;
     }
 
-    /* Kerala vertical band (light red with thicker red borders) */
     thead th:nth-child(6) {
       border-left: 2px solid #c00000 !important;
       border-right: 2px solid #c00000 !important;
@@ -213,7 +260,6 @@
       border-right: 2px solid #c00000 !important;
     }
 
-    /* Body numbers (green) except Date & Kerala */
     tbody td {
       color: #007a00;
       font-weight: 700;
@@ -235,18 +281,13 @@
       border-right: 10px solid transparent;
     }
 
-
-    /* tbody tr:nth-child(even) td:not(:nth-child(6)),
-    tbody tr:nth-child(odd) td:not(:nth-child(6)) {
-      background: #fff !important;
-    } */
-
+    /* ===== Download button (kept styles from your snippet) ===== */
     :root {
       --btn-bg-1: #6ee7f9;
       --btn-bg-2: #3b82f6;
       --btn-text: #0b1220;
       --btn-glow: #60a5fa;
-      --btn-shadow: rgba(59, 130, 246, .5)
+      --btn-shadow: rgba(59, 130, 246, .5);
     }
 
     .btn-download {
@@ -266,6 +307,7 @@
       box-shadow: 0 8px 24px -8px var(--btn-shadow), inset 0 0 0 1px rgba(255, 255, 255, .25);
       cursor: pointer;
       overflow: hidden;
+      margin: 10px auto 24px;
     }
 
     .btn-download .icon {
@@ -300,16 +342,32 @@
       height: 3px;
       border-radius: 2px
     }
+
+    /* Responsive bits */
+    @media (max-width: 720px) {
+      #saturday {
+        padding: 8px;
+      }
+
+      #saturday a {
+        height: 38px;
+        padding: 0 12px;
+      }
+
+      .filter-box {
+        width: 94vw;
+      }
+    }
   </style>
 </head>
 
 <body style="text-align:center">
-  <!-- HEADER -->
+  <!-- HEADER (fixed; keeps your structure) -->
   <form name="timeform">
+    <h1>KINGAPP7</h1>
+  </form>
+  <div style="align-items: center;justify-content: center; display: flex; margin-top: 10px;">
     <table border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <th scope="col"><img src="img/top1.png" width="100%" height="120" alt="Header" /></th>
-      </tr>
       <tr align="center">
         <td>
           <ul id="saturday">
@@ -323,7 +381,7 @@
         </td>
       </tr>
     </table>
-  </form>
+  </div>
 
   <div class="wrap">
     <div class="filter-box">
@@ -338,21 +396,21 @@
       <table class="month-chart">
         <!-- Widths sum to 1080px exactly -->
         <colgroup>
-          <col style="width:80px"> <!-- Date / Month column -->
-          <col style="width:112px"> <!-- 11AM -->
-          <col style="width:111px"> <!-- 12PM -->
-          <col style="width:111px"> <!-- 01PM -->
-          <col style="width:111px"> <!-- 02PM -->
-          <col style="width:111px"> <!-- Kerala -->
-          <col style="width:111px"> <!-- 04PM -->
-          <col style="width:111px"> <!-- 06PM -->
-          <col style="width:111px"> <!-- 07PM -->
-          <col style="width:111px"> <!-- 08PM -->
+          <col style="width:80px">
+          <col style="width:112px">
+          <col style="width:111px">
+          <col style="width:111px">
+          <col style="width:111px">
+          <col style="width:111px">
+          <col style="width:111px">
+          <col style="width:111px">
+          <col style="width:111px">
+          <col style="width:111px">
         </colgroup>
         <thead>
           <tr class="top-banner">
             <th id="monthNumber"></th>
-            <th colspan="9" style="text-align: le;">spot + Kerala</th>
+            <th colspan="9" style="text-align:left;">spot + Kerala</th>
           </tr>
           <tr>
             <th class="month-head" id="monthAbbr">AUG</th>
@@ -379,7 +437,7 @@
   </div>
 
   <script>
-    /* button ripple */
+    /* button ripple position (kept) */
     const btn = document.getElementById('downloadBtn');
     btn.addEventListener('pointermove', e => {
       const r = btn.getBoundingClientRect();
@@ -388,7 +446,7 @@
     });
   </script>
 
-  <!-- Pixel-exact export (1080px wide, no scaling) -->
+  <!-- Pixel-exact export (unchanged functional logic) -->
   <script>
     (() => {
       const BUTTON_ID = 'downloadBtn';
@@ -426,11 +484,7 @@
         for (const src of CDNS.domToImage) { try { await loadScriptOnce(src); await sleep(30); if (window.domtoimage?.toPng) return 'domtoimage'; } catch { } }
         throw new Error('No capture library available');
       }
-      async function waitForFonts() {
-        if (document.fonts && document.fonts.status !== 'loaded') {
-          try { await document.fonts.ready; } catch { }
-        }
-      }
+      async function waitForFonts() { if (document.fonts && document.fonts.status !== 'loaded') { try { await document.fonts.ready; } catch { } } }
       const rAF = () => new Promise(r => requestAnimationFrame(r));
 
       function buildStage(node) {
@@ -473,22 +527,10 @@
         const { stage, clone } = buildStage(node);
         try {
           const { scaledHeight } = await layoutAndMeasure(clone, stage);
-
-          const opts = {
-            width: TARGET_WIDTH,
-            height: scaledHeight,
-            pixelRatio: 1,  // 1:1 pixels
-            cacheBust: true,
-            backgroundColor: BG_COLOR,
-            bgcolor: BG_COLOR
-          };
-
+          const opts = { width: TARGET_WIDTH, height: scaledHeight, pixelRatio: 1, cacheBust: true, backgroundColor: BG_COLOR, bgcolor: BG_COLOR };
           let dataUrl;
-          if (lib === 'htmlToImage') {
-            dataUrl = await window.htmlToImage.toPng(stage, opts);
-          } else {
-            dataUrl = await window.domtoimage.toPng(stage, opts);
-          }
+          if (lib === 'htmlToImage') dataUrl = await window.htmlToImage.toPng(stage, opts);
+          else dataUrl = await window.domtoimage.toPng(stage, opts);
 
           const a = document.createElement('a');
           a.download = `${FILENAME_PREFIX}${getMonthText()}.png`;
@@ -503,7 +545,7 @@
       }
 
       function ready(fn) { document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn); }
-      ready(() => { const b = document.getElementById(BUTTON_ID); if (b) b.addEventListener('click', exportNow); });
+      ready(() => { const b = document.getElementById('downloadBtn'); if (b) b.addEventListener('click', exportNow); });
     })();
   </script>
 
@@ -523,17 +565,15 @@
     const db = firebase.database();
   </script>
 
-  <!-- Header padding sync -->
+  <!-- Header padding sync (kept) -->
   <script>
     function syncBodyPaddingToHeader() {
       const header = document.querySelector('form[name="timeform"]');
       if (!header) return;
-      document.body.style.paddingTop = header.offsetHeight + 'px';
+      document.querySelector('.wrap').style.paddingTop = (header.offsetHeight + 10) + 'px';
     }
     window.addEventListener('load', syncBodyPaddingToHeader);
     window.addEventListener('resize', syncBodyPaddingToHeader);
-    const headerImg = document.querySelector('form[name="timeform"] img');
-    if (headerImg) { headerImg.addEventListener('load', syncBodyPaddingToHeader); }
   </script>
 
   <!-- Page logic (unchanged) -->
@@ -550,7 +590,7 @@
       const m = d.getMonth() + 1;
       monthPicker.value = `${d.getFullYear()}-${String(m).padStart(2, "0")}`;
       monthAbbr.textContent = d.toLocaleString('en', { month: 'short' }).toUpperCase();
-      monthNumberCell.textContent = m;  // shows "8" for August
+      monthNumberCell.textContent = m;
       loadMonth();
     })();
 
