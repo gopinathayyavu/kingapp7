@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lucky Draw — Spin & Win (3-Digit)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      /* Lottery, carnival, festive */
+      --bg-a: #fff9df;
+      --bg-b: #ffe7a8;
+      --red: #ff3b30;
+      --gold: #ffb000;
+      --gold-d: #d18a00;
+      --blue: #1479ff;
+      --green: #10b981;
+      --text: #222;
+      --muted: #5a5a5a;
+      --ticket: #ffffff;
+      --dot: #e9c86b;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:#01662c;
+      font-family: Nunito, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .wrap {
+      width: min(1100px, 100%);
+      display: grid;
+      gap: 18px
+    }
+
+    /* Header marquee */
+    header {
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      text-align: center;
+    }
+
+    .title {
+      font-family: "Luckiest Guy", cursive;
+      font-size: clamp(34px, 6vw, 64px);
+      letter-spacing: 1px;
+      color: #c51b14;
+      text-shadow: 0 4px 0 #ffd0cc, 0 10px 20px rgba(197, 27, 20, .25);
+    }
+
+    .strap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #fff 0, #fff5cf 100%);
+      border: 2px dashed #ffd36c;
+      font-weight: 800;
+      color: #8a6a00;
+    }
+
+    .ball {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: inset 0 -3px 0 var(--gold-d)
+    }
+
+    /* Ticket card container */
+    .ticket {
+      background: var(--ticket);
+      border-radius: 22px;
+      border: 2px solid #ffe08a;
+      padding: 18px;
+      box-shadow: 0 18px 40px rgba(224, 164, 0, .28);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* perforated edges */
+    .ticket:before,
+    .ticket:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(6px 6px at 0 20px, var(--dot) 98%, transparent 100%) repeat-y,
+        radial-gradient(6px 6px at 100% 20px, var(--dot) 98%, transparent 100%) repeat-y;
+      background-size: 12px 28px, 12px 28px;
+      background-position: -6px 14px, calc(100% + 6px) 14px;
+      opacity: .35;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    @media (max-width:900px) {
+      .grid {
+        grid-template-columns: 1fr
+      }
+    }
+
+    /* Wheel */
+    .wheel-wrap {
+      display: grid;
+      place-items: center;
+      padding: 8px
+    }
+
+    .wheel {
+      width: min(520px, 100%);
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      position: relative;
+      background:
+        conic-gradient(#ff595e 0 36deg, #ffca3a 36deg 72deg, #8ac926 72deg 108deg, #1982c4 108deg 144deg, #6a4c93 144deg 180deg, #ff595e 180deg 216deg, #ffca3a 216deg 252deg, #8ac926 252deg 288deg, #1982c4 288deg 324deg, #6a4c93 324deg 360deg);
+      border: 10px solid #ffd36c;
+      box-shadow: inset 0 0 0 8px #fff, 0 14px 30px rgba(0, 0, 0, .15);
+      display: grid;
+      place-items: center;
+    }
+
+    .wheel .rim {
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      background: #fffcee;
+      border: 6px solid #ffe39b;
+      display: grid;
+      place-items: center;
+    }
+
+    .pointer {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-bottom: 28px solid var(--red);
+      filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .25));
+    }
+
+    .drum {
+      width: 68%;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      background: radial-gradient(60% 60% at 50% 35%, #fff 0, #fff5cc 70%, #ffe39b 100%);
+      border: 6px solid #ffd36c;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 12px;
+    }
+
+    .digits {
+      font-family: "Luckiest Guy", cursive;
+      font-size: clamp(44px, 8.2vw, 96px);
+      color: #2b2b2b;
+      letter-spacing: .08em;
+      text-shadow: 0 2px 0 #ffd36c, 0 10px 24px rgba(0, 0, 0, .12);
+    }
+
+    .label {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 800;
+      color: #8a6a00;
+      background: #fff7d1;
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 2px solid #ffe08a;
+    }
+
+    /* Controls panel */
+    .panel {
+      display: grid;
+      align-content: center;
+      gap: 16px;
+      padding: 6px;
+    }
+
+    h2 {
+      margin: 0;
+      font-family: "Luckiest Guy", cursive;
+      font-size: clamp(22px, 3.6vw, 36px);
+      color: #b41610;
+      text-shadow: 0 3px 0 #ffd0cc;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 700
+    }
+
+    .cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 900;
+      letter-spacing: .4px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 16px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, .12);
+      transition: transform .08s ease, filter .2s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(.99)
+    }
+
+    .btn[disabled] {
+      opacity: .7;
+      cursor: not-allowed
+    }
+
+    .btn-spin {
+      background: linear-gradient(135deg, #ff4d42, #ff8a4a)
+    }
+
+    .btn-reset {
+      background: linear-gradient(135deg, #4bb543, #42c88a)
+    }
+
+    .result {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-weight: 900;
+      color: #0b6b2c;
+      background: #e9ffe8;
+      border: 2px solid #bff1c8;
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+
+    .result.show {
+      display: flex;
+      animation: pop .28s ease-out
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(.98);
+        opacity: 0
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    /* Spinner overlay (open-source style: “arc ring” loader) */
+    .loader {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s ease;
+    }
+
+    .spinning .loader {
+      opacity: 1
+    }
+
+    /* confetti */
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      pointer-events: none
+    }
+
+    .confetti i {
+      position: absolute;
+      top: -12px;
+      width: 10px;
+      height: 14px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #fff, #eee);
+      animation: fall 1.5s ease-in forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px) rotate(0deg)
+      }
+
+      10% {
+        opacity: 1
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(110vh) rotate(540deg)
+      }
+    }
+
+    /* Footer note */
+    footer {
+      text-align: center;
+      color: #826a00;
+      font-weight: 800;
+      margin-top: 4px;
+      font-size: 13px
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">LUCKY DRAW</div>
+      <div class="strap"><span class="ball"></span> 3-Digit Spin<span class="ball"></span></div>
+    </header>
+
+    <section class="ticket">
+      <div class="grid">
+        <!-- Wheel -->
+        <div class="wheel-wrap">
+          <div class="wheel" id="wheel">
+            <div class="rim">
+              <div class="drum">
+                <div class="digits" id="digits">000</div>
+              </div>
+            </div>
+            <!-- Open-source style spinner (inline, generic “arc” loader, permissive use) -->
+            <div class="loader" aria-hidden="true">
+              <svg width="160" height="160" viewBox="0 0 50 50" role="img" aria-label="Spinning">
+                <g fill="none" stroke-width="5" stroke-linecap="round">
+                  <circle cx="25" cy="25" r="20" stroke="#ffe3a6" opacity=".45" />
+                  <path id="arc" d="M45 25a20 20 0 0 0-20-20" stroke="#ff7b3e">
+                    <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s"
+                      repeatCount="indefinite" />
+                  </path>
+                </g>
+              </svg>
+            </div>
+            <div class="label">Spin & Win</div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="panel">
+          <h2>Spin the Wheel!</h2>
+          <p>Press <strong>SPIN</strong> to roll and Get your <strong>3-digit</strong> lucky number.</p>
+
+          <div class="cta">
+            <button id="spinBtn" class="btn btn-spin" type="button" aria-controls="digits">🎉 SPIN</button>
+            <button id="resetBtn" class="btn btn-reset" type="button">↺ RESET</button>
+          </div>
+
+          <div id="result" class="result" role="status" aria-live="polite" aria-atomic="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 7L9 18l-5-5" fill="none" stroke="#0b6b2c" stroke-width="3" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+            <span id="resultText">This is your lucky number: <strong>000</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>Play responsibly • Results are random</footer>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+  <div class="sr-only" aria-live="polite" id="ariaLive"></div>
+
+  <script>
+    (() => {
+      const wheel = document.getElementById('wheel');
+      const digitsEl = document.getElementById('digits');
+      const spinBtn = document.getElementById('spinBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const result = document.getElementById('result');
+      const resultText = document.getElementById('resultText');
+      const ariaLive = document.getElementById('ariaLive');
+      const confetti = document.getElementById('confetti');
+
+      let spinning = false;
+
+      function rand3() {
+        const n = Math.floor(Math.random() * 1000); // 0..999 uniform
+        return n.toString().padStart(3, '0');
+      }
+
+      function spin() {
+        if (spinning) return;
+        spinning = true;
+        spinBtn.disabled = true;
+        result.classList.remove('show');
+
+        // add UI state
+        wheel.classList.add('spinning');
+
+        // nice spin (6–9 turns)
+        const turns = 6 + Math.floor(Math.random() * 4);
+        wheel.animate(
+          [{ transform: 'rotate(0deg)' }, { transform: `rotate(${360 * turns}deg)` }],
+          { duration: 2000, easing: 'cubic-bezier(.15,.9,.1,1)' }
+        );
+
+        // reveal number
+        setTimeout(() => {
+          const value = rand3();
+          digitsEl.textContent = value;
+
+          wheel.classList.remove('spinning');
+
+          resultText.innerHTML = `This is your lucky number: <strong>${value}</strong>`;
+          result.classList.add('show');
+          ariaLive.textContent = `Your lucky number is ${value}.`;
+
+          popConfetti();
+          spinning = false;
+          spinBtn.disabled = false;
+        }, 2050);
+      }
+
+      function reset() {
+        digitsEl.textContent = '000';
+        result.classList.remove('show');
+      }
+
+      function popConfetti() {
+        const pieces = 50;
+        const w = window.innerWidth;
+        for (let i = 0; i < pieces; i++) {
+          const bit = document.createElement('i');
+          bit.style.left = (Math.random() * w) + 'px';
+          bit.style.background = randColor();
+          bit.style.animationDelay = (Math.random() * 0.2) + 's';
+          bit.style.transform = `translateY(-20px) rotate(${Math.random() * 120}deg)`;
+          confetti.appendChild(bit);
+          bit.addEventListener('animationend', () => bit.remove());
+        }
+      }
+      function randColor() {
+        const c = ['#ff3b30', '#ffb000', '#1479ff', '#10b981', '#6a4c93', '#ffca3a'];
+        const a = c[Math.floor(Math.random() * c.length)];
+        return `linear-gradient(180deg, ${a}, #ffffff)`;
+      }
+
+      spinBtn.addEventListener('click', spin);
+      resetBtn.addEventListener('click', reset);
+    })();
+  </script>
+</body>
+
+</html>
